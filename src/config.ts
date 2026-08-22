@@ -9,27 +9,31 @@ import type {
 } from "./types/config";
 
 export const identity: Identity = {
-  name: "Tim Witzdam",
+  name: "BAO LOC BDS",
   logo: "/logo.webp",
-  email: "tim@witzdam.com",
+  email: "thienphuocera@gmail.com",
 };
 
 export const navBarLinks: NavBarLink[] = [
   {
-    title: "Home",
+    title: "Trang chủ",
     url: "/",
   },
   {
-    title: "About",
-    url: "/about",
+    title: "Phú Gia Bảo Lộc",
+    url: "/phu-gia-bao-loc",
   },
   {
-    title: "Projects",
-    url: "/projects",
+    title: "Câu chuyện",
+    url: "/cau-chuyen",
   },
   {
-    title: "Blog",
-    url: "/blog",
+    title: "Thị trường",
+    url: "/thi-truong",
+  },
+  {
+    title: "Liên hệ",
+    url: "/lien-he",
   },
 ];
 
@@ -50,42 +54,41 @@ export const socialLinks: SocialLink[] = [
 // Home (/)
 export const homePageContent: HomePageContent = {
   seo: {
-    title: "Tim Witzdam",
+    title: "Bất Động Sản Bảo Lộc | Mua Bán Đất, Nhà Đất Bảo Lộc | Phú Gia Bảo Lộc",
     description:
-      "Full time student from Germany who loves building cool things using code.",
+      "Chia sẻ góc nhìn thực tế về bất động sản Bảo Lộc, thị trường, dự án và những câu chuyện phía sau mỗi quyết định xuống tiền",
     image: identity.logo,
   },
-  role: "Student & Software Developer",
+  role: "Bất động sản • Bảo Lộc • Góc nhìn thực tế",
   description:
-    "I'm Tim Witzdam, a full time student from Germany who also loves building cool things using code.",
+    "BAO LOC BDS – Chuyên tư vấn bất động sản Bảo Lộc. Cập nhật đất nền, nhà đất, dự án, giá bán và thông tin thị trường Bảo Lộc minh bạch, thực tế",
   socialLinks: socialLinks,
-  links: [
-    {
-      title: "My Projects",
-      url: "/projects",
-    },
-    {
-      title: "About Me",
-      url: "/about",
-    },
-  ],
+    links: [
+      {
+        title: "Phú Gia Bảo Lộc",
+        url: "/phu-gia-bao-loc",
+      },
+      {
+        title: "Câu chuyện",
+        url: "/cau-chuyen",
+      },
+    ],
 };
 
 // About (/about)
 export const aboutPageContent: AboutPageContent = {
   seo: {
-    title: "About | Tim Witzdam",
+    title: "Bất Động Sản Bảo Lộc | Phước – Tư Vấn Nhà Đất Bảo Lộc",
     description:
-      "Full time student from Germany who loves building cool things using code.",
+      "Phước tư vấn bất động sản Bảo Lộc với thông tin thực tế, minh bạch và dễ hiểu. Khám phá đất nền, nhà đất, dự án và cơ hội đầu tư tại Bảo Lộc.",
     image: identity.logo,
   },
-  subtitle: "Some information about myself",
+  subtitle: "Phước : 096 502 7930",
   about: {
     description: `
-I'm Tim Witzdam, a full time student from Germany who also loves building cool things using code.
+"Chia sẻ góc nhìn thực tế về bất động sản Bảo Lộc, thị trường, dự án và những câu chuyện phía sau mỗi quyết định xuống tiền."
 <br/><br/>
-Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eaque placeat est architecto tempora voluptatem sit suscipit aspernatur? <br/><br/>
-Facere quibusdam reiciendis, distinctio sunt praesentium error accusantium consectetur nemo vero officia itaque.`, // Markdown is supported
+Bất động sản Bảo Lộc — thị trường, dự án, góc nhìn thực tế và những câu chuyện phía sau mỗi giao dịch.`, // Markdown is supported
     image_l: {
       url: "/demo-1.jpg",
       alt: "Left Picture",
@@ -96,7 +99,7 @@ Facere quibusdam reiciendis, distinctio sunt praesentium error accusantium conse
     },
   },
   work: {
-    description: `I've worked with a variety of technologies and tools to build cool things. Here are some of the projects I've worked on.`, // Markdown is supported
+    description: `tư vấn bất động sản Bảo Lộc với thông tin thực tế, minh bạch và dễ hiểu. Khám phá đất nền, nhà đất, dự án và cơ hội đầu tư tại Bảo Lộc`, // Markdown is supported
     items: [
       {
         title: "Software Developer",
@@ -119,7 +122,7 @@ Facere quibusdam reiciendis, distinctio sunt praesentium error accusantium conse
     ],
   },
   connect: {
-    description: `I'm always interested in meeting new people and learning new things. Feel free to connect with me on any of the following platforms.`, // Markdown is supported
+    description: `Phước tư vấn bất động sản Bảo Lộc với thông tin thực tế, minh bạch và dễ hiểu. Khám phá đất nền, nhà đất, dự án và cơ hội đầu tư tại Bảo Lộc.`, // Markdown is supported
     links: socialLinks,
   },
 };
@@ -160,9 +163,9 @@ export const projectsPageContent: ProjectPageContent = {
 // Blog (/blog)
 export const blogPageContent: BlogPageContent = {
   seo: {
-    title: "Blog | Tim Witzdam",
-    description: "Thoughts, stories and ideas.",
+    title: "Blog | BAO LOC BDS",
+    description: "thông tin thị trường Bảo Lộc",
     image: identity.logo,
   },
-  subtitle: "Thoughts, stories and ideas.",
+  subtitle: "thông tin thị trường Bảo Lộc",
 };

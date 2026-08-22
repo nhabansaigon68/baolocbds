@@ -7,83 +7,896 @@ import Link from "../components/Link.astro";
 import { getCollection } from "astro:content";
 
 const posts = await getCollection("posts");
+
 posts.sort((a, b) => {
   const dateA = new Date(a.data.pubDate).getTime();
   const dateB = new Date(b.data.pubDate).getTime();
+
   return dateB - dateA;
 });
-posts.splice(2)
+
+posts.splice(2);
 ---
 
 <Layout seo={homePageContent.seo}>
-  <section class="mt-10 max-w-2xl mx-auto px-6">
-    <h1 class="font-bold text-3xl mb-1">{identity.name}</h1>
-    <p class="opacity-60 mb-10">{homePageContent.role}</p>
-    <div class="flex flex-col min-[520px]:flex-row gap-6 mb-8">
-      <Image
-        src={identity.logo}
-        alt={identity.name}
-        width={100}
-        height={100}
-        class="rounded-full"
-      />
-      <div class="group flex flex-col justify-center gap-2 w-fit">
-        {
-          homePageContent.socialLinks.map((link) => (
-            <SocialLink
-              title={link.title}
-              url={link.url}
-              icon={link.icon}
-              external={link.external}
-            />
-          ))
-        }
-      </div>
-    </div>
-    <p class="max-w-md mb-8">
-      {homePageContent.description}
-    </p>
-    <div class="flex items-center gap-4 group w-fit">
-      {
-        homePageContent.links.map((link) => (
-          <Link text={link.title} href={link.url} external={link.external} />
-        ))
-      }
-    </div>
-  </section>
-  <section class="mt-20 max-w-2xl mx-auto px-6">
-    <h2 class="mb-8">Latest Posts</h2>
-    <div class="grid grid-cols-1 gap-10 sm:gap-6 mb-10">
-      {
-        posts.map((post) => (
+
+  <!-- HERO -->
+  <section class="hero-section">
+
+    <div class="hero-inner">
+
+      <div class="hero-copy">
+
+        <p class="eyebrow">
+          BAO LOC BDS
+        </p>
+
+        <h1>
+          BẢO LỘC
+        </h1>
+
+        <p class="hero-tagline">
+          Đất, người và những câu chuyện phía sau.
+        </p>
+
+        <p class="hero-description">
+          Một góc nhìn về bất động sản và cuộc sống tại Bảo Lộc —
+          nơi những con đường, vùng đất và con người tạo nên giá trị
+          vượt xa một giao dịch.
+        </p>
+
+        <div class="hero-actions">
+
           <a
-            href={`/blog/${post.id}`}
-            class=" sm:flex sm:flex-row-reverse sm:justify-between sm:gap-6 post"
+            href="/blog"
+            class="primary-button"
           >
-            <Image
-              src={post.data.image.url}
-              alt={post.data.image.url}
-              width={100}
-              height={100}
-              class={"rounded-lg w-[100px] h-[100px] object-cover"}
-            />
-            <div class="mt-4 sm:my-auto">
-              <p class="opacity-60 mb-2">
-                {post.data.pubDate.toLocaleDateString()}
-              </p>
-              <h3 class="font-medium hover-underline">{post.data.title}</h3>
-              <p class="text-sm opacity-60 mt-2 mb-3">{post.data.description}</p>
-            </div>
+            Khám phá Bảo Lộc
           </a>
-        ))
-      }
+
+          <a
+            href={`mailto:${identity.email}`}
+            class="secondary-button"
+          >
+            Liên hệ với Phước
+          </a>
+
+        </div>
+
+      </div>
+
+
+      <!-- IDENTITY -->
+      <div class="hero-identity">
+
+        <img
+          src="/images/logo.png"
+          alt="BAO LOC BDS"
+          class="identity-logo"
+        />
+
+        <div class="identity-info">
+
+          <p class="identity-name">
+            {identity.name}
+          </p>
+
+          <p class="identity-role">
+            {homePageContent.role}
+          </p>
+
+        </div>
+
+        <div class="social-links">
+
+          {
+            homePageContent.socialLinks.map((link) => (
+              <SocialLink
+                title={link.title}
+                url={link.url}
+                icon={link.icon}
+                external={link.external}
+              />
+            ))
+          }
+
+        </div>
+
+      </div>
+
     </div>
-    <div class="text-center">
+
+  </section>
+
+
+  <!-- INTRO -->
+  <section class="intro-section">
+
+    <div class="intro-inner">
+
+      <p class="section-label">
+        VỀ BAO LOC BDS
+      </p>
+
+      <h2>
+        Không chỉ nói về bất động sản.
+      </h2>
+
+      <p class="intro-text">
+        Bảo Lộc đang thay đổi từng ngày.
+        Những con đường mới, những khu dân cư mới,
+        những người tìm đến để sống, làm việc và đầu tư.
+      </p>
+
+      <p class="intro-text">
+        BAO LOC BDS là nơi mình ghi lại những điều đó —
+        bằng góc nhìn của một người trực tiếp quan sát,
+        tìm hiểu và làm việc với thị trường.
+      </p>
+
+    </div>
+
+  </section>
+
+
+  <!-- POSTS -->
+  <section class="posts-section">
+
+    <div class="section-heading">
+
+      <div>
+
+        <p class="section-label">
+          GÓC NHÌN & CÂU CHUYỆN
+        </p>
+
+        <h2>
+          Những điều đáng để đọc.
+        </h2>
+
+      </div>
+
       <a
         href="/blog"
-        class="underline underline-offset-4 opacity-60 hover:opacity-100 transition-opacity"
-        >View all</a
+        class="view-all"
       >
+        Xem tất cả →
+      </a>
+
     </div>
+
+
+    <div class="posts-grid">
+
+      {
+        posts.map((post) => (
+
+          <a
+            href={`/blog/${post.id}`}
+            class="post-card"
+          >
+
+            <Image
+              src={post.data.image.url}
+              alt={post.data.title}
+              width={700}
+              height={450}
+              class="post-image"
+            />
+
+            <div class="post-content">
+
+              <p class="post-date">
+                {post.data.pubDate.toLocaleDateString(
+                  "vi-VN"
+                )}
+              </p>
+
+              <h3>
+                {post.data.title}
+              </h3>
+
+              <p class="post-description">
+                {post.data.description}
+              </p>
+
+              <span class="read-more">
+                Đọc câu chuyện →
+              </span>
+
+            </div>
+
+          </a>
+
+        ))
+      }
+
+    </div>
+
   </section>
+
+
+  <!-- CONTACT -->
+  <section class="contact-section">
+
+    <div class="contact-inner">
+
+      <p class="section-label">
+        KẾT NỐI
+      </p>
+
+      <h2>
+        Nếu P đang tìm hiểu Bảo Lộc,
+        cứ bắt đầu bằng một cuộc trò chuyện.
+      </h2>
+
+      <p>
+        Không cần phải quyết định ngay.
+        Đôi khi một cuộc trò chuyện đúng lúc
+        chỉ đơn giản là giúp mình nhìn mọi thứ rõ hơn.
+      </p>
+
+      <a
+        href={`mailto:${identity.email}`}
+        class="primary-button"
+      >
+        {identity.email}
+      </a>
+
+    </div>
+
+  </section>
+
+
 </Layout>
+
+
+<style>
+
+  /* ================================
+     HERO
+  ================================= */
+
+  .hero-section {
+
+    padding:
+      90px 24px
+      100px;
+
+  }
+
+
+  .hero-inner {
+
+    max-width: 1180px;
+
+    margin: 0 auto;
+
+    display: grid;
+
+    grid-template-columns:
+      minmax(0, 1fr)
+      240px;
+
+    gap: 80px;
+
+    align-items: center;
+
+  }
+
+
+  .eyebrow,
+  .section-label {
+
+    font-size: 11px;
+
+    letter-spacing: 0.18em;
+
+    font-weight: 600;
+
+    color: #77766f;
+
+    margin-bottom: 18px;
+
+  }
+
+
+  .hero-copy h1 {
+
+    font-size:
+      clamp(64px, 11vw, 150px);
+
+    line-height: 0.9;
+
+    letter-spacing: -0.07em;
+
+    font-weight: 700;
+
+    margin: 0;
+
+  }
+
+
+  .hero-tagline {
+
+    font-size:
+      clamp(24px, 3vw, 38px);
+
+    line-height: 1.2;
+
+    letter-spacing: -0.03em;
+
+    margin-top: 28px;
+
+    max-width: 700px;
+
+  }
+
+
+  .hero-description {
+
+    max-width: 600px;
+
+    margin-top: 28px;
+
+    font-size: 16px;
+
+    line-height: 1.8;
+
+    color: #696862;
+
+  }
+
+
+  .hero-actions {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 12px;
+
+    margin-top: 36px;
+
+  }
+
+
+  /* ================================
+     BUTTONS
+  ================================= */
+
+  .primary-button {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding:
+      13px 20px;
+
+    border-radius: 8px;
+
+    background: #242e25;
+
+    color: white;
+
+    font-size: 14px;
+
+    font-weight: 500;
+
+    transition:
+      transform 200ms,
+      opacity 200ms;
+
+  }
+
+
+  .primary-button:hover {
+
+    transform: translateY(-2px);
+
+    opacity: 0.9;
+
+  }
+
+
+  .secondary-button {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding:
+      13px 20px;
+
+    border-radius: 8px;
+
+    border: 1px solid #d9d7d0;
+
+    color: #33332f;
+
+    font-size: 14px;
+
+    transition:
+      background 200ms,
+      border-color 200ms;
+
+  }
+
+
+  .secondary-button:hover {
+
+    background: #efeee9;
+
+    border-color: #c8c6be;
+
+  }
+
+
+  /* ================================
+     IDENTITY
+  ================================= */
+
+  .hero-identity {
+
+    padding:
+      28px;
+
+    border:
+      1px solid #e4e2dc;
+
+    border-radius: 18px;
+
+    background:
+      rgba(255,255,255,0.45);
+
+  }
+
+
+  .identity-logo {
+
+    width: 200px;
+
+    height: auto;
+
+    display: block;
+
+  }
+
+
+  .identity-info {
+
+    margin-top: 20px;
+
+  }
+
+
+  .identity-name {
+
+    font-weight: 600;
+
+  }
+
+
+  .identity-role {
+
+    font-size: 13px;
+
+    color: #77766f;
+
+    margin-top: 4px;
+
+  }
+
+
+  .social-links {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+    margin-top: 24px;
+
+  }
+
+
+  /* ================================
+     INTRO
+  ================================= */
+
+  .intro-section {
+
+    padding:
+      110px 24px;
+
+    background:
+      #eeece5;
+
+  }
+
+
+  .intro-inner {
+
+    max-width: 760px;
+
+    margin: 0 auto;
+
+  }
+
+
+  .intro-inner h2 {
+
+    font-size:
+      clamp(36px, 5vw, 58px);
+
+    line-height: 1.05;
+
+    letter-spacing: -0.05em;
+
+    margin-bottom: 32px;
+
+  }
+
+
+  .intro-text {
+
+    font-size: 17px;
+
+    line-height: 1.9;
+
+    color: #62615b;
+
+    margin-top: 18px;
+
+  }
+
+
+  /* ================================
+     POSTS
+  ================================= */
+
+  .posts-section {
+
+    max-width: 1180px;
+
+    margin: 0 auto;
+
+    padding:
+      110px 24px;
+
+  }
+
+
+  .section-heading {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: end;
+
+    gap: 30px;
+
+    margin-bottom: 45px;
+
+  }
+
+
+  .section-heading h2 {
+
+    font-size:
+      clamp(34px, 4vw, 50px);
+
+    line-height: 1;
+
+    letter-spacing: -0.05em;
+
+  }
+
+
+  .view-all {
+
+    font-size: 14px;
+
+    color: #66655f;
+
+    white-space: nowrap;
+
+  }
+
+
+  .view-all:hover {
+
+    color: #171717;
+
+  }
+
+
+  .posts-grid {
+
+    display: grid;
+
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    gap: 28px;
+
+  }
+
+
+  .post-card {
+
+    display: block;
+
+    overflow: hidden;
+
+    border-radius: 16px;
+
+    border: 1px solid #e3e1db;
+
+    background: #ffffff;
+
+    transition:
+      transform 250ms,
+      box-shadow 250ms;
+
+  }
+
+
+  .post-card:hover {
+
+    transform: translateY(-5px);
+
+    box-shadow:
+      0 20px 50px
+      rgba(0,0,0,0.08);
+
+  }
+
+
+  .post-image {
+
+    width: 100%;
+
+    height: 280px;
+
+    object-fit: cover;
+
+    display: block;
+
+  }
+
+
+  .post-content {
+
+    padding: 26px;
+
+  }
+
+
+  .post-date {
+
+    font-size: 12px;
+
+    color: #888780;
+
+    margin-bottom: 12px;
+
+  }
+
+
+  .post-content h3 {
+
+    font-size: 24px;
+
+    line-height: 1.25;
+
+    letter-spacing: -0.03em;
+
+  }
+
+
+  .post-description {
+
+    margin-top: 12px;
+
+    font-size: 14px;
+
+    line-height: 1.7;
+
+    color: #77766f;
+
+  }
+
+
+  .read-more {
+
+    display: inline-block;
+
+    margin-top: 22px;
+
+    font-size: 13px;
+
+    font-weight: 500;
+
+  }
+
+
+  /* ================================
+     CONTACT
+  ================================= */
+
+  .contact-section {
+
+    padding:
+      110px 24px;
+
+    background:
+      #242e25;
+
+    color: white;
+
+  }
+
+
+  .contact-inner {
+
+    max-width: 760px;
+
+    margin: 0 auto;
+
+  }
+
+
+  .contact-section .section-label {
+
+    color: #b9c1b8;
+
+  }
+
+
+  .contact-section h2 {
+
+    font-size:
+      clamp(38px, 5vw, 62px);
+
+    line-height: 1.05;
+
+    letter-spacing: -0.05em;
+
+  }
+
+
+  .contact-section p:not(.section-label) {
+
+    margin-top: 25px;
+
+    max-width: 600px;
+
+    line-height: 1.8;
+
+    color: #c8cec7;
+
+  }
+
+
+  .contact-section .primary-button {
+
+    margin-top: 32px;
+
+    background: white;
+
+    color: #242e25;
+
+  }
+
+
+  /* ================================
+     MOBILE
+  ================================= */
+
+  @media (max-width: 767px) {
+
+    .hero-section {
+
+      padding:
+        65px 20px
+        80px;
+
+    }
+
+
+    .hero-inner {
+
+      grid-template-columns: 1fr;
+
+      gap: 55px;
+
+    }
+
+
+    .hero-copy h1 {
+
+      font-size: 72px;
+
+    }
+
+
+    .hero-tagline {
+
+      font-size: 27px;
+
+    }
+
+
+    .hero-description {
+
+      font-size: 15px;
+
+    }
+
+
+    .hero-identity {
+
+      max-width: 320px;
+
+    }
+
+
+    .intro-section {
+
+      padding:
+        80px 20px;
+
+    }
+
+
+    .posts-section {
+
+      padding:
+        80px 20px;
+
+    }
+
+
+    .section-heading {
+
+      align-items: start;
+
+      flex-direction: column;
+
+      gap: 12px;
+
+    }
+
+
+    .posts-grid {
+
+      grid-template-columns: 1fr;
+
+    }
+
+
+    .post-image {
+
+      height: 230px;
+
+    }
+
+
+    .contact-section {
+
+      padding:
+        80px 20px;
+
+    }
+
+  }
+
+</style>
