@@ -17,19 +17,24 @@ Production flow đã PASS:
 
 Test page: `/du-an/phu-gia-bao-loc/gia-ban/`
 
-Verified:
-
-- form submit thành công;
-- success UI: `Đã nhận thông tin. Mình sẽ liên hệ sớm.`;
-- Supabase có record mới;
-- `intent = bang-gia`;
-- `source_url = /du-an/phu-gia-bao-loc/gia-ban/`;
-- phone normalize E.164;
-- Cloudflare deploy PASS.
+Verified: form submit, success UI, Supabase record, `intent = bang-gia`, source URL, E.164 phone normalization và Cloudflare deployment đều PASS.
 
 Deployment checkpoint: Worker `baolocbds`, Version ID `4dad9cd1-77fb-4d93-a597-0e9d9b8436e4`.
 
 Lead Capture V1 foundation chính thức DONE.
+
+## DONE — SEO Foundation Registration
+
+### BL-SEO-030 — Google Search Console
+
+**Status: DONE — 2026-09-07**
+
+- Domain Property `baolocbds.com` verified.
+- Verification bằng DNS TXT tại Cloudflare.
+- Không xóa TXT verification record.
+- Sitemap `https://baolocbds.com/sitemap-index.xml` đã submit thành công.
+
+Theo dõi tiếp theo là indexing/coverage/query khi Search Console bắt đầu có dữ liệu; đây là monitoring, không còn blocking setup.
 
 ## P1 — Lead conversion
 
@@ -64,13 +69,7 @@ Giữ form tối giản: phone required, name optional.
 
 ### BL-LEAD-002 — Error handling hardening
 
-Sau khi intent mapping ổn định:
-
-- invalid phone -> 400;
-- DB unavailable -> user-friendly error;
-- chống double submit;
-- loading state ổn định;
-- mobile UX PASS.
+Sau khi intent mapping ổn định: invalid phone -> 400; DB unavailable -> user-friendly error; chống double submit; loading state; mobile UX.
 
 ### BL-LEAD-003 — Anti-spam foundation
 
@@ -84,19 +83,7 @@ Sau khi bắt đầu có lead thật, thiết kế workflow tối thiểu: xem l
 
 ### BL-PGBL-020 — Project Fact Sheet / Source of Truth
 
-Chuẩn hóa fact sheet trước khi mở rộng content:
-
-- tên pháp lý/thương mại;
-- chủ đầu tư/pháp nhân;
-- địa chỉ/toạ độ;
-- diện tích;
-- số lượng sản phẩm;
-- QH 1/500;
-- pháp lý;
-- loại sản phẩm;
-- tiến độ;
-- chính sách;
-- ngân hàng hỗ trợ.
+Chuẩn hóa fact sheet trước khi mở rộng content: tên pháp lý/thương mại, chủ đầu tư/pháp nhân, địa chỉ/toạ độ, diện tích, số lượng sản phẩm, QH 1/500, pháp lý, loại sản phẩm, tiến độ, chính sách, ngân hàng hỗ trợ.
 
 Reconcile các số liệu khác nhau như 9.1 ha / 9.12 ha trước khi chuẩn hóa toàn site.
 
@@ -127,10 +114,6 @@ Khai thác tiến độ thanh toán, vay, ân hạn, ưu đãi khi còn hiệu l
 Xây FAQ từ câu hỏi khách thực sự tìm: vị trí, chủ đầu tư, pháp lý, sổ, giá, vay, diện tích, khoảng cách trung tâm, xây dựng, chính sách. Không nhồi keyword.
 
 ## P1 — SEO
-
-### BL-SEO-030 — Google Search Console
-
-Sau deploy ổn định: verify domain, submit `https://baolocbds.com/sitemap-index.xml`, theo dõi indexing/query/coverage.
 
 ### BL-SEO-031 — Validate structured data
 
