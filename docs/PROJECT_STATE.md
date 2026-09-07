@@ -121,6 +121,19 @@ DONE:
 
 Checkpoint gần nhất: `astro check` PASS 0 errors / 0 warnings / 0 hints; production build PASS.
 
+### Google Search Console
+
+Ngày 2026-09-07:
+
+- Domain Property `baolocbds.com` đã xác minh quyền sở hữu thành công.
+- Phương thức xác minh: DNS / Nhà cung cấp tên miền.
+- DNS TXT verification được lưu tại Cloudflare và phải được giữ nguyên.
+- Sitemap `https://baolocbds.com/sitemap-index.xml` đã submit thành công trong Google Search Console.
+
+**BL-SEO-030 = DONE (foundation).**
+
+Theo dõi tiếp theo trong Search Console: discovery/indexing, coverage và search queries khi Google bắt đầu thu thập dữ liệu.
+
 ## 9. Nguồn nội dung ERA Agent
 
 Đã thu thập landing nội bộ ERA Agent cho Phú Gia Bảo Lộc. Chỉ dùng như nguồn sales/content nội bộ để khai thác fact, USP và cấu trúc thông tin.
@@ -245,6 +258,8 @@ Cloudflare deployment checkpoint:
 - Sitemap: PASS
 - Robots: PASS
 - Structured data: PASS
+- Google Search Console domain verification: PASS
+- Google Search Console sitemap submission: PASS
 - Supabase database: PASS
 - Direct DB insert: PASS
 - Lead component check: PASS
