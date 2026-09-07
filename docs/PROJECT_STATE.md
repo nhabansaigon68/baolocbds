@@ -198,29 +198,37 @@ API thực hiện parse/validate/normalize/sanitize và insert Supabase qua REST
 
 Không dùng Supabase Realtime trong Lead V1. Quyết định này giảm dependency runtime và tránh WebSocket requirement trên Node 20.
 
-Package `ws` từng được cài chỉ để diagnostic, sau đó đã gỡ.
+Package `ws` từng được cài chỉ để diagnostic, sau đó đã gỡ. `@supabase/supabase-js` cũng đã được gỡ vì Lead API cuối cùng dùng native REST `fetch()`.
 
 ## 15. LeadCapture component
 
 Đã tạo `src/components/LeadCapture.astro` với phone required, name optional, intent prop, source URL, client validation, loading state, POST `/api/leads`, success/error feedback và responsive UI.
 
-Hiện mount thử trên `/du-an/phu-gia-bao-loc/gia-ban/` với `intent = bang-gia`.
+Hiện mount trên `/du-an/phu-gia-bao-loc/gia-ban/` với `intent = bang-gia`.
 
-## 16. Lead Capture current status
+## 16. Lead Capture V1 — PRODUCTION E2E PASS
 
-PASS:
+Ngày 2026-09-07 đã deploy production và smoke-test thành công toàn bộ flow:
 
-- Supabase direct DB insert.
-- Lead API `astro check`.
-- LeadCapture `astro check`.
+`baolocbds.com -> LeadCapture -> POST /api/leads -> Cloudflare Worker -> Supabase public.leads -> success UI`
 
-CHƯA VERIFY end-to-end:
+Kết quả xác minh:
 
-Browser form -> `/api/leads` -> Cloudflare runtime -> Supabase -> success UI.
+- production build PASS;
+- Wrangler deploy PASS;
+- form trên `/du-an/phu-gia-bao-loc/gia-ban/` submit thành công;
+- UI trả: `Đã nhận thông tin. Mình sẽ liên hệ sớm.`;
+- record mới xuất hiện trong Supabase;
+- `intent = bang-gia`;
+- `source_url = /du-an/phu-gia-bao-loc/gia-ban/`;
+- phone normalize đúng E.164.
 
-Lý do: Big Sur không chạy được Cloudflare runtime local.
+Cloudflare deployment checkpoint:
 
-Lead Capture V1 CHƯA được đánh dấu DONE.
+- Worker: `baolocbds`
+- Version ID: `4dad9cd1-77fb-4d93-a597-0e9d9b8436e4`
+
+**BL-LEAD-001 = DONE. Lead Capture V1 foundation = DONE.**
 
 ## 17. Known issues
 
@@ -241,14 +249,16 @@ Lead Capture V1 CHƯA được đánh dấu DONE.
 - Direct DB insert: PASS
 - Lead component check: PASS
 - Lead API check: PASS
-- Production E2E Lead test: PENDING
+- Production E2E Lead test: PASS
+- Lead Capture V1 foundation: DONE
 
 ## 19. Next exact action
 
-1. Build production.
-2. Deploy Cloudflare.
-3. Mở `/du-an/phu-gia-bao-loc/gia-ban/`.
-4. Submit một lead test.
-5. Verify record trong Supabase.
-6. Verify success UI.
-7. Chỉ khi PASS mới đánh dấu Lead Capture V1 DONE.
+Mở rộng LeadCapture có chọn lọc theo search/visitor intent, không nhét form vào mọi page.
+
+Ưu tiên tiếp theo:
+
+1. `BL-LEAD-010` — CTA intent mapping.
+2. Gắn LeadCapture vào Tổng quan / Chính sách / Mặt bằng với intent riêng.
+3. Giữ form tối giản: phone required, name optional.
+4. Sau đó mới làm anti-spam, attribution và lead operations khi có nhu cầu thực tế.
