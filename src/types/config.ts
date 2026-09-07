@@ -7,7 +7,7 @@ export type NavBarLink = {
 export type SocialLink = {
   title: string;
   url: string;
-  icon: string;
+  icon?: string;
   external?: boolean;
 };
 
@@ -23,16 +23,12 @@ export type SEOInfo = {
   image: string;
 };
 
+
 export type HomePageContent = {
   seo: SEOInfo;
   role: string;
   description: string;
   socialLinks: SocialLink[];
-  links: {
-    title: string;
-    url: string;
-    external?: boolean;
-  }[];
 };
 
 export type ResumeItem = {

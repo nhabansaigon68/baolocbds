@@ -20,33 +20,41 @@ export const navBarLinks: NavBarLink[] = [
     url: "/",
   },
   {
-    title: "Phú Gia Bảo Lộc",
-    url: "/phu-gia-bao-loc",
-  },
-  {
-    title: "Câu chuyện",
-    url: "/cau-chuyen",
+    title: "Dự án",
+    url: "/du-an/",
   },
   {
     title: "Thị trường",
-    url: "/thi-truong",
+    url: "/thi-truong/",
+  },
+  {
+    title: "Tài chính",
+    url: "/tai-chinh/",
   },
   {
     title: "Liên hệ",
-    url: "/lien-he",
+    url: "/lien-he/",
   },
 ];
 
+
+
 export const socialLinks: SocialLink[] = [
   {
-    title: "GitHub",
-    url: "https://github.com/TimWitzdam",
-    icon: "mdi:github",
+    title: "096 502 7930",
+    url: "tel:0965027930",
+    icon: "mdi:phone",
+  },
+  
+  {
+    title: "Nhắn tin zalo",
+    url: "https://zalo.me/0965027930",
     external: true,
   },
+  
   {
-    title: "Mail",
-    url: "mailto:tim@witzdam.com",
+    title: "Email",
+    url: "mailto:thienphuocera@gmail.com",
     icon: "mdi:email",
   },
 ];
@@ -54,25 +62,21 @@ export const socialLinks: SocialLink[] = [
 // Home (/)
 export const homePageContent: HomePageContent = {
   seo: {
-    title: "Bất Động Sản Bảo Lộc | Mua Bán Đất, Nhà Đất Bảo Lộc | Phú Gia Bảo Lộc",
+    title:
+      "Bất Động Sản Bảo Lộc | Mua Bán Đất, Nhà Đất Bảo Lộc | Phú Gia Bảo Lộc",
+
     description:
       "Chia sẻ góc nhìn thực tế về bất động sản Bảo Lộc, thị trường, dự án và những câu chuyện phía sau mỗi quyết định xuống tiền",
+
     image: identity.logo,
   },
+
   role: "Bất động sản • Bảo Lộc • Góc nhìn thực tế",
+
   description:
     "BAO LOC BDS – Chuyên tư vấn bất động sản Bảo Lộc. Cập nhật đất nền, nhà đất, dự án, giá bán và thông tin thị trường Bảo Lộc minh bạch, thực tế",
+
   socialLinks: socialLinks,
-    links: [
-      {
-        title: "Phú Gia Bảo Lộc",
-        url: "/phu-gia-bao-loc",
-      },
-      {
-        title: "Câu chuyện",
-        url: "/cau-chuyen",
-      },
-    ],
 };
 
 // About (/about)
@@ -106,7 +110,7 @@ Bất động sản Bảo Lộc — thị trường, dự án, góc nhìn thực
         company: {
           name: "Freelance",
           image: "/logo.webp",
-          url: "https://github.com/TimWitzdam",
+          url: "https://baolocbds.com/lien-he",
         },
         date: "2021 - Present",
       },
@@ -115,7 +119,7 @@ Bất động sản Bảo Lộc — thị trường, dự án, góc nhìn thực
         company: {
           name: "Freelance",
           image: "/logo.webp",
-          url: "https://github.com/TimWitzdam",
+          url: "https://baolocbds.com/lien-he",
         },
         date: "2019 - 2021",
       },
@@ -141,21 +145,21 @@ export const projectsPageContent: ProjectPageContent = {
       description: "Project 1 Description",
       image: "/demo-2.jpg",
       year: "2024",
-      url: "https://github.com/TimWitzdam",
+      url: "https://baolocbds.com/lien-he",
     },
     {
       title: "Project 1",
       description: "Project 1 Description",
       image: "/demo-2.jpg",
       year: "2024",
-      url: "https://github.com/TimWitzdam",
+      url: "https://baolocbds.com/lien-he",
     },
     {
       title: "Project 1",
       description: "Project 1 Description",
       image: "/demo-2.jpg",
       year: "2024",
-      url: "https://github.com/TimWitzdam",
+      url: "https://baolocbds.com/lien-he",
     },
   ],
 };

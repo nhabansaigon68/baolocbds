@@ -1,0 +1,347 @@
+---
+interface Props {
+  title?: string;
+  intent: string;
+  buttonLabel?: string;
+}
+
+const {
+  title = "Nhận thông tin mới nhất",
+  intent,
+  buttonLabel = "Gửi cho tôi",
+} = Astro.props;
+---
+
+<section class="lead-capture">
+  <div class="lead-capture-inner">
+    <div class="lead-copy">
+      <p class="lead-eyebrow">NHẬN THÔNG TIN</p>
+
+      <h2>{title}</h2>
+
+      <p>
+        Để lại số điện thoại, mình sẽ gửi thông tin phù hợp với nội dung bạn đang quan tâm.
+      </p>
+    </div>
+
+    <form
+      class="lead-form"
+      id={`lead-form-${intent}`}
+      data-intent={intent}
+      novalidate
+    >
+      <div class="lead-fields">
+        <label class="field">
+          <span>Số điện thoại</span>
+
+          <input
+            type="tel"
+            name="phone"
+            inputmode="tel"
+            autocomplete="tel"
+            placeholder="Ví dụ: 0965027930"
+            required
+          />
+
+          <small class="field-error" data-phone-error></small>
+        </label>
+
+        <label class="field">
+          <span>Tên <em>không bắt buộc</em></span>
+
+          <input
+            type="text"
+            name="name"
+            autocomplete="name"
+            maxlength="80"
+            placeholder="Tên của bạn"
+          />
+        </label>
+      </div>
+
+      <input
+        type="hidden"
+        name="intent"
+        value={intent}
+      />
+
+      <input
+        type="hidden"
+        name="sourceUrl"
+        value=""
+        data-source-url
+      />
+
+      <button type="submit" class="lead-submit">
+        {buttonLabel}
+      </button>
+
+      <p class="lead-status" data-lead-status></p>
+    </form>
+  </div>
+</section>
+
+<script>
+  function normalizeVietnamPhone(value: string) {
+    const cleaned = value
+      .trim()
+      .replace(/[.\s()-]/g, "");
+
+    if (/^0\d{9}$/.test(cleaned)) {
+      return `+84${cleaned.slice(1)}`;
+    }
+
+    if (/^\+84\d{9}$/.test(cleaned)) {
+      return cleaned;
+    }
+
+    if (/^84\d{9}$/.test(cleaned)) {
+      return `+${cleaned}`;
+    }
+
+    return null;
+  }
+
+  document.querySelectorAll<HTMLFormElement>(".lead-form").forEach((form) => {
+    const phoneInput =
+      form.querySelector<HTMLInputElement>('input[name="phone"]');
+
+    const nameInput =
+      form.querySelector<HTMLInputElement>('input[name="name"]');
+
+    const intentInput =
+      form.querySelector<HTMLInputElement>('input[name="intent"]');
+
+    const sourceUrlInput =
+      form.querySelector<HTMLInputElement>("[data-source-url]");
+
+    const errorEl =
+      form.querySelector<HTMLElement>("[data-phone-error]");
+
+    const statusEl =
+      form.querySelector<HTMLElement>("[data-lead-status]");
+
+    if (sourceUrlInput) {
+      sourceUrlInput.value = window.location.pathname;
+    }
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      if (!phoneInput || !intentInput) {
+        return;
+      }
+
+      const normalizedPhone = normalizeVietnamPhone(phoneInput.value);
+
+      if (!normalizedPhone) {
+        phoneInput.setAttribute("aria-invalid", "true");
+
+        if (errorEl) {
+          errorEl.textContent =
+            "Kiểm tra lại số điện thoại giúp mình.";
+        }
+
+        if (statusEl) {
+          statusEl.textContent = "";
+        }
+
+        phoneInput.focus();
+        return;
+      }
+
+      phoneInput.removeAttribute("aria-invalid");
+
+      if (errorEl) {
+        errorEl.textContent = "";
+      }
+
+      const lead = {
+        phone: phoneInput.value.trim(),
+        name: nameInput?.value.trim() || null,
+        intent: intentInput.value,
+        sourceUrl: sourceUrlInput?.value || window.location.pathname,
+      };
+
+      const submitButton =
+        form.querySelector<HTMLButtonElement>(".lead-submit");
+
+      if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.textContent = "Đang gửi...";
+      }
+
+      if (statusEl) {
+        statusEl.textContent = "";
+      }
+
+      try {
+        const response = await fetch("/api/leads", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(lead),
+        });
+
+        const result = await response.json();
+
+        if (!response.ok || !result.ok) {
+          throw new Error(result.error || "SAVE_FAILED");
+        }
+
+        if (statusEl) {
+          statusEl.textContent =
+            "Đã nhận thông tin. Mình sẽ liên hệ sớm.";
+        }
+
+        form.reset();
+
+        if (sourceUrlInput) {
+          sourceUrlInput.value = window.location.pathname;
+        }
+      } catch (error) {
+        console.error("LEAD_CAPTURE_SUBMIT_ERROR", error);
+
+        if (statusEl) {
+          statusEl.textContent =
+            "Chưa gửi được. Bạn thử lại hoặc liên hệ Zalo giúp mình.";
+        }
+      } finally {
+        if (submitButton) {
+          submitButton.disabled = false;
+          submitButton.textContent = "Gửi cho tôi";
+        }
+      }
+    });
+  });
+</script>
+
+<style>
+  .lead-capture {
+    margin: 72px 0;
+    padding: 32px;
+    border: 1px solid rgba(23, 23, 23, 0.1);
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.55);
+  }
+
+  .lead-capture-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 0.9fr);
+    gap: 40px;
+    align-items: start;
+  }
+
+  .lead-eyebrow {
+    margin: 0 0 10px;
+    color: #657067;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+  }
+
+  .lead-copy h2 {
+    margin: 0;
+    color: #171717;
+    font-size: 30px;
+    line-height: 1.15;
+    letter-spacing: -0.025em;
+  }
+
+  .lead-copy p:last-child {
+    margin: 14px 0 0;
+    color: #686860;
+    line-height: 1.65;
+  }
+
+  .lead-form {
+    display: grid;
+    gap: 16px;
+  }
+
+  .lead-fields {
+    display: grid;
+    gap: 14px;
+  }
+
+  .field {
+    display: grid;
+    gap: 7px;
+  }
+
+  .field > span {
+    color: #373733;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .field em {
+    color: #8a8a82;
+    font-style: normal;
+    font-weight: 400;
+  }
+
+  .field input {
+    width: 100%;
+    min-height: 48px;
+    padding: 0 14px;
+    border: 1px solid rgba(23, 23, 23, 0.14);
+    border-radius: 12px;
+    background: #fff;
+    color: #171717;
+    font: inherit;
+    outline: none;
+  }
+
+  .field input:focus {
+    border-color: #173c2c;
+    box-shadow: 0 0 0 3px rgba(23, 60, 44, 0.08);
+  }
+
+  .field input[aria-invalid="true"] {
+    border-color: #a33a2b;
+  }
+
+  .field-error {
+    min-height: 18px;
+    color: #a33a2b;
+    font-size: 12px;
+  }
+
+  .lead-submit {
+    min-height: 48px;
+    padding: 0 18px;
+    border: 0;
+    border-radius: 999px;
+    background: #173c2c;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 650;
+    cursor: pointer;
+  }
+
+  .lead-status {
+    min-height: 20px;
+    margin: 0;
+    color: #3d5b4b;
+    font-size: 13px;
+  }
+
+  @media (max-width: 767px) {
+    .lead-capture {
+      margin: 56px 0;
+      padding: 22px;
+      border-radius: 18px;
+    }
+
+    .lead-capture-inner {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    .lead-copy h2 {
+      font-size: 25px;
+    }
+  }
+</style>

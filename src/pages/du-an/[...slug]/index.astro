@@ -1,0 +1,252 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import ProjectHero from "../../../components/ProjectHero.astro";
+
+import { getCollection, render } from "astro:content";
+import ProjectNav from "../../../components/ProjectNav.astro";
+import LeadCapture from "../../../components/LeadCapture.astro";
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const projects = await getCollection("projects");
+
+  return projects.map((project) => {
+    const [projectSlug, pageSlug] = project.id.split("/");
+
+    return {
+      params: {
+        slug:
+          pageSlug === "tong-quan"
+            ? projectSlug
+            : `${projectSlug}/${pageSlug}`,
+      },
+      props: {
+        project,
+      },
+    };
+  });
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+
+const [projectSlug, pageSlug] = project.id.split("/");
+
+const projectName =
+  project.data.projectName ?? project.data.title;
+
+const pageUrl =
+  pageSlug === "tong-quan"
+    ? `https://baolocbds.com/du-an/${projectSlug}/`
+    : `https://baolocbds.com/du-an/${projectSlug}/${pageSlug}/`;
+
+const breadcrumbItems = [
+  {
+    "@type": "ListItem",
+    position: 1,
+    name: "Trang chủ",
+    item: "https://baolocbds.com/",
+  },
+  {
+    "@type": "ListItem",
+    position: 2,
+    name: "Dự án",
+    item: "https://baolocbds.com/du-an/",
+  },
+  {
+    "@type": "ListItem",
+    position: 3,
+    name: projectName,
+    item: `https://baolocbds.com/du-an/${projectSlug}/`,
+  },
+];
+
+if (pageSlug !== "tong-quan") {
+  breadcrumbItems.push({
+    "@type": "ListItem",
+    position: 4,
+    name: project.data.navTitle ?? project.data.title,
+    item: pageUrl,
+  });
+}
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: breadcrumbItems,
+};
+---
+
+<Layout
+  seo={{
+    title: `${project.data.title} | BAO LOC BDS`,
+    description: project.data.description,
+    image: "/logo.webp",
+  }}
+>
+  <script
+    is:inline
+    type="application/ld+json"
+    set:html={JSON.stringify(breadcrumbSchema)}
+  />
+    <ProjectHero
+      title={project.data.projectName ?? project.data.title}
+      description={project.data.description}
+      image="/images/projects/phu-gia-bao-loc/tong-quan.jpg"
+      location={project.data.location}
+      status={project.data.status}
+      priceUrl="/du-an/phu-gia-bao-loc/gia-ban/"
+    />
+  <ProjectNav projectSlug={projectSlug} />
+  <main class="mt-10 max-w-4xl mx-auto px-6">
+
+    <article class="project-content">
+      <Content />
+    </article>
+
+    {pageSlug === "gia-ban" && (
+      <LeadCapture
+        title="Nhận bảng giá & giỏ hàng mới nhất"
+        intent="bang-gia"
+        buttonLabel="Nhận bảng giá"
+      />
+    )}
+
+  </main>
+</Layout>
+
+<style>
+  .project-content {
+    max-width: 860px;
+    margin: 0 auto;
+    color: #2a2a26;
+    font-size: 17px;
+    line-height: 1.75;
+  }
+
+  .project-content :global(h1) {
+    display: none;
+  }
+
+  .project-content :global(h2) {
+    margin: 56px 0 18px;
+    color: #171717;
+    font-size: 30px;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+    font-weight: 650;
+  }
+
+  .project-content :global(h3) {
+    margin: 36px 0 14px;
+    color: #1f1f1c;
+    font-size: 22px;
+    line-height: 1.3;
+    font-weight: 650;
+  }
+
+  .project-content :global(p) {
+    margin: 0 0 20px;
+  }
+
+  .project-content :global(strong) {
+    color: #171717;
+    font-weight: 650;
+  }
+
+  .project-content :global(ul),
+  .project-content :global(ol) {
+    margin: 18px 0 26px;
+    padding-left: 24px;
+  }
+
+  .project-content :global(li) {
+    margin: 7px 0;
+  }
+
+  .project-content :global(a) {
+    color: #173c2c;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  .project-content :global(table) {
+    width: 100%;
+    margin: 28px 0 36px;
+    border-collapse: separate;
+    border-spacing: 0;
+    overflow: hidden;
+    border: 1px solid rgba(23, 23, 23, 0.10);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.52);
+  }
+
+  .project-content :global(th),
+  .project-content :global(td) {
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(23, 23, 23, 0.08);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .project-content :global(th) {
+    background: rgba(23, 23, 23, 0.035);
+    color: #171717;
+    font-size: 14px;
+    font-weight: 650;
+  }
+
+  .project-content :global(tr:last-child td) {
+    border-bottom: 0;
+  }
+
+  .project-content :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 30px 0;
+    border-radius: 18px;
+  }
+
+  .project-content :global(hr) {
+    margin: 50px 0;
+    border: 0;
+    border-top: 1px solid rgba(23, 23, 23, 0.10);
+  }
+
+  @media (max-width: 767px) {
+    .project-content {
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .project-content :global(h2) {
+      margin-top: 42px;
+      font-size: 26px;
+    }
+
+    .project-content :global(h3) {
+      font-size: 20px;
+    }
+
+    .project-content :global(table) {
+      display: table;
+      width: 100%;
+      table-layout: fixed;
+      white-space: normal;
+    }
+
+    .project-content :global(th),
+    .project-content :global(td) {
+      padding: 12px 10px;
+      overflow-wrap: anywhere;
+      word-break: normal;
+    }
+
+    .project-content :global(th:first-child),
+    .project-content :global(td:first-child) {
+      width: 34%;
+    }
+  }
+</style>

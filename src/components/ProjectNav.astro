@@ -1,0 +1,137 @@
+---
+import { getCollection } from "astro:content";
+
+interface Props {
+  projectSlug: string;
+}
+
+const { projectSlug } = Astro.props;
+
+const pages = (await getCollection("projects"))
+  .filter((project) => project.id.startsWith(`${projectSlug}/`))
+  .sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999));
+---
+
+<div class="project-nav-shell">
+  <nav
+    class="project-nav"
+    aria-label="Điều hướng dự án"
+  >
+    {
+      pages.map((page) => {
+        const pageSlug = page.id.split("/")[1];
+
+        const href =
+          pageSlug === "tong-quan"
+            ? `/du-an/${projectSlug}/`
+            : `/du-an/${projectSlug}/${pageSlug}/`;
+
+        const active = Astro.url.pathname === href;
+
+        return (
+          <a
+            href={href}
+            class:list={[
+              "project-nav-link",
+              active && "is-active",
+            ]}
+            aria-current={active ? "page" : undefined}
+          >
+            {page.data.navTitle ?? page.data.title}
+          </a>
+        );
+      })
+    }
+  </nav>
+</div>
+
+<style>
+  .project-nav-shell {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+
+    width: 100%;
+
+    background: rgba(248, 247, 243, 0.94);
+    border-bottom: 1px solid rgba(23, 23, 23, 0.10);
+
+    backdrop-filter: blur(14px);
+  }
+
+  .project-nav {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    width: 100%;
+    max-width: 1440px;
+
+    margin: 0 auto;
+    padding: 10px 24px;
+
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .project-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .project-nav-link {
+    position: relative;
+
+    flex: 0 0 auto;
+
+    padding: 10px 12px;
+
+    border-radius: 8px;
+
+    color: #686860;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1;
+
+    text-decoration: none;
+    white-space: nowrap;
+
+    transition:
+      color 180ms ease,
+      background-color 180ms ease;
+  }
+
+  .project-nav-link:hover {
+    color: #171717;
+    background: rgba(23, 23, 23, 0.045);
+  }
+
+  .project-nav-link.is-active {
+    color: #173c2c;
+    font-weight: 650;
+  }
+
+  .project-nav-link.is-active::after {
+    content: "";
+
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 2px;
+
+    height: 2px;
+    border-radius: 999px;
+
+    background: #173c2c;
+  }
+
+  @media (max-width: 767px) {
+    .project-nav {
+      padding: 9px 16px;
+    }
+
+    .project-nav-link {
+      padding: 10px 11px;
+      font-size: 13px;
+    }
+  }
+</style>

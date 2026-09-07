@@ -1,0 +1,54 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+
+const projects = (await getCollection("projects"))
+  .filter((project) => project.id.endsWith("/tong-quan"))
+  .sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999));
+---
+
+<Layout
+  seo={{
+    title: "Dự án | BAO LOC BDS",
+    description:
+      "Thông tin các dự án bất động sản được Phước tư vấn và chia sẻ tại BAO LỘC BDS.",
+    image: "/logo.webp",
+  }}
+>
+  <main class="mt-10 max-w-5xl mx-auto px-6">
+    <header class="mb-10">
+      <h1 class="font-bold text-3xl">Dự án</h1>
+
+      <p class="opacity-60 mt-2">
+        Thông tin dự án bất động sản được Phước cập nhật.
+      </p>
+    </header>
+
+    <section class="grid grid-cols-1 gap-6">
+      {
+        projects.map((project) => {
+          const projectSlug = project.id.split("/")[0];
+
+          return (
+            <article class="border border-black/10 rounded-xl p-6">
+              <h2 class="font-semibold text-xl">
+                {project.data.title}
+              </h2>
+
+              <p class="opacity-60 mt-2">
+                {project.data.description}
+              </p>
+
+              <a
+                href={`/du-an/${projectSlug}/`}
+                class="inline-block mt-4 text-sm underline"
+              >
+                Xem dự án →
+              </a>
+            </article>
+          );
+        })
+      }
+    </section>
+  </main>
+</Layout>

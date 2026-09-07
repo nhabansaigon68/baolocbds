@@ -1,0 +1,49 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import { getCollection, render } from "astro:content";
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const posts = (await getCollection("posts"))
+    .filter((post) => post.data.category === "thi-truong");
+
+  return posts.map((post) => ({
+    params: {
+      slug: post.id,
+    },
+    props: {
+      post,
+    },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<Layout
+  seo={{
+    title: `${post.data.title} | BAO LOC BDS`,
+    description: post.data.description,
+    image: post.data.image.url,
+  }}
+>
+  <main class="mt-10 max-w-4xl mx-auto px-6">
+    <header class="mb-10">
+      <p class="opacity-60 mb-2">Thị trường</p>
+
+      <h1 class="font-bold text-4xl">
+        {post.data.title}
+      </h1>
+
+      <p class="opacity-60 mt-4">
+        {post.data.description}
+      </p>
+    </header>
+
+    <article class="prose prose-neutral max-w-none">
+      <Content />
+    </article>
+  </main>
+</Layout>

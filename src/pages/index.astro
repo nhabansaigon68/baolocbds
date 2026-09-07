@@ -3,7 +3,7 @@ import { Image } from "astro:assets";
 import Layout from "../layouts/Layout.astro";
 import { homePageContent, identity } from "../config";
 import SocialLink from "../components/SocialLink.astro";
-import Link from "../components/Link.astro";
+
 import { getCollection } from "astro:content";
 
 const posts = await getCollection("posts");
@@ -16,6 +16,10 @@ posts.sort((a, b) => {
 });
 
 posts.splice(2);
+const featuredProjects = (await getCollection("projects"))
+  .filter((project) => project.id.endsWith("/tong-quan"));
+
+
 ---
 
 <Layout seo={homePageContent.seo}>
@@ -141,6 +145,101 @@ posts.splice(2);
 
   <!-- POSTS -->
   <section class="posts-section">
+      <!-- FEATURED PROJECTS -->
+      <section class="featured-projects-section">
+
+    <div class="featured-projects-inner">
+
+      <div class="featured-projects-heading">
+
+        <div>
+          <p class="section-label">
+            DỰ ÁN
+          </p>
+
+          <h2>
+            Dự án nổi bật.
+          </h2>
+        </div>
+
+        <a
+          href="/du-an/"
+          class="view-all"
+        >
+          Xem dự án →
+        </a>
+
+      </div>
+
+      <div class="featured-projects-grid">
+
+        {
+          featuredProjects.map((project) => {
+            const projectSlug = project.id.split("/")[0];
+
+            return (
+              <a
+                href={`/du-an/${projectSlug}/`}
+                class="featured-project-card"
+              >
+                <div class="featured-project-image-wrap">
+
+                  <img
+                    src={
+                      project.data.cover ??
+                      `/images/projects/${projectSlug}/tong-quan.jpg`
+                    }
+                    alt={project.data.projectName ?? project.data.title}
+                    class="featured-project-image"
+                    loading="lazy"
+                  />
+
+                  <div class="featured-project-overlay"></div>
+
+                  <div class="featured-project-badge">
+                    DỰ ÁN · BẢO LỘC
+                  </div>
+
+                </div>
+
+                <div class="featured-project-content">
+
+                  <div>
+                    <h3>
+                      {project.data.projectName ?? project.data.title}
+                    </h3>
+
+                    {project.data.location && (
+                      <p class="featured-project-location">
+                        {project.data.location}
+                      </p>
+                    )}
+                  </div>
+
+                  <span class="featured-project-arrow">
+                    →
+                  </span>
+
+                </div>
+
+                <p class="featured-project-description">
+                  {project.data.description}
+                </p>
+
+              </a>
+            );
+          })
+        }
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- POSTS -->
+  <section class="posts-section">
 
     <div class="section-heading">
 
@@ -226,7 +325,7 @@ posts.splice(2);
       </p>
 
       <h2>
-        Nếu P đang tìm hiểu Bảo Lộc,
+        Nếu bạn đang tìm hiểu Bảo Lộc,
         cứ bắt đầu bằng một cuộc trò chuyện.
       </h2>
 
@@ -237,10 +336,12 @@ posts.splice(2);
       </p>
 
       <a
-        href={`mailto:${identity.email}`}
+        href="https://zalo.me/0965027930"
         class="primary-button"
+        target="_blank"
+        rel="noopener noreferrer"
       >
-        {identity.email}
+        Zalo: 096 502 7930
       </a>
 
     </div>
@@ -897,6 +998,152 @@ posts.splice(2);
 
     }
 
+  }
+
+    .featured-projects-section {
+  padding: 90px 24px;
+}
+
+.featured-projects-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.featured-projects-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 34px;
+}
+
+.featured-projects-heading h2 {
+  margin: 6px 0 0;
+  font-size: clamp(30px, 4vw, 46px);
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+}
+
+.featured-projects-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 28px;
+}
+
+.featured-project-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.featured-project-image-wrap {
+  position: relative;
+  aspect-ratio: 16 / 8;
+  overflow: hidden;
+  border-radius: 24px;
+  background: #ddd;
+}
+
+.featured-project-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 500ms ease;
+}
+
+.featured-project-card:hover .featured-project-image {
+  transform: scale(1.025);
+}
+
+.featured-project-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      0deg,
+      rgba(10, 14, 10, 0.42) 0%,
+      rgba(10, 14, 10, 0.04) 58%
+    );
+}
+
+.featured-project-badge {
+  position: absolute;
+  left: 22px;
+  top: 22px;
+
+  padding: 8px 11px;
+
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 999px;
+
+  background: rgba(0, 0, 0, 0.16);
+  backdrop-filter: blur(8px);
+
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+}
+
+.featured-project-content {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 22px;
+}
+
+.featured-project-content h3 {
+  margin: 0;
+  font-size: 28px;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+}
+
+.featured-project-location {
+  margin: 8px 0 0;
+  color: #6b6b64;
+  font-size: 14px;
+}
+
+.featured-project-arrow {
+  font-size: 28px;
+  line-height: 1;
+}
+
+.featured-project-description {
+  max-width: 760px;
+  margin: 16px 0 0;
+  color: #5f5f59;
+  line-height: 1.7;
+}
+
+  @media (max-width: 767px) {
+    .featured-projects-section {
+      padding: 64px 20px;
+    }
+
+    .featured-projects-heading {
+      align-items: flex-start;
+    }
+
+    .featured-project-image-wrap {
+      aspect-ratio: 4 / 3;
+      border-radius: 18px;
+    }
+
+    .featured-project-badge {
+      left: 14px;
+      top: 14px;
+    }
+
+    .featured-project-content h3 {
+      font-size: 24px;
+    }
+
+    .featured-project-description {
+      font-size: 15px;
+    }
   }
 
 </style>

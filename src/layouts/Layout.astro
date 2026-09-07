@@ -1,6 +1,5 @@
 ---
 import "../styles/global.css";
-import { Image } from "astro:assets";
 import { Icon } from "astro-icon/components";
 import { navBarLinks, identity } from "../config";
 import type { SEOInfo } from "../types/config";
@@ -10,6 +9,35 @@ interface Props {
 }
 
 const { seo } = Astro.props;
+
+const siteUrl = "https://baolocbds.com";
+
+const canonicalUrl = new URL(
+  Astro.url.pathname,
+  siteUrl
+).toString();
+
+const socialImage = new URL(
+  seo.image,
+  siteUrl
+).toString();
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: identity.name,
+  url: siteUrl,
+  inLanguage: "vi-VN",
+};
+
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: identity.name,
+  url: siteUrl,
+  logo: new URL(identity.logo, siteUrl).toString(),
+  email: identity.email,
+};
 ---
 
 <script>
@@ -74,11 +102,37 @@ const { seo } = Astro.props;
     />
 
     <meta property="og:title" content={seo.title} />
+
     <meta
       property="og:description"
       content={seo.description}
     />
-    <meta property="og:image" content={seo.image} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={socialImage} />
+
+    <link rel="canonical" href={canonicalUrl} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={seo.title} />
+    <meta
+      name="twitter:description"
+      content={seo.description}
+    />
+    <meta name="twitter:image" content={socialImage} />
+
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify(websiteSchema)}
+    />
+
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify(organizationSchema)}
+    />
   </head>
 
   <body>
@@ -136,18 +190,41 @@ const { seo } = Astro.props;
           </nav>
 
 
-          <!-- EMAIL -->
-          <a
-            href={`mailto:${identity.email}`}
-            class="email-button hidden md:flex"
-            aria-label="Email"
-          >
-            <Icon
-              name="mdi:email-outline"
-              width={22}
-              height={22}
-            />
-          </a>
+          <!-- CONTACT -->
+          <div class="hidden md:flex items-center gap-2">
+
+            <!-- PHONE -->
+            <a
+              href="tel:0965027930"
+              class="contact-button"
+              aria-label="Gọi Phước - 096 502 7930"
+            >
+
+              <Icon
+                name="mdi:phone-outline"
+                width={20}
+                height={20}
+              />
+
+              <span>
+                096 502 7930
+              </span>
+
+            </a>
+
+
+            <!-- ZALO -->
+            <a
+              href="https://zalo.me/0965027930"
+              class="contact-button"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Liên hệ Zalo"
+            >
+
+            </a>
+
+          </div>
 
 
           <!-- MOBILE MENU -->
@@ -159,14 +236,19 @@ const { seo } = Astro.props;
               class="mobile-menu-button"
               aria-label="Mở menu"
             >
+
               Menu
-              <span id="open-indicator">+</span>
+
+              <span id="open-indicator">
+                +
+              </span>
+
             </button>
 
 
             <div
               id="link-menu"
-              class="mobile-menu"
+              class="mobile-menu opacity-0 pointer-events-none"
             >
 
               <ul>
@@ -192,8 +274,50 @@ const { seo } = Astro.props;
               </ul>
 
 
-              <div class="mt-2 pt-2 border-t border-gray-200">
+              <!-- MOBILE CONTACT -->
+              <div
+                class="mt-2 pt-2 border-t border-gray-200"
+              >
 
+                <!-- PHONE -->
+                <a
+                  href="tel:0965027930"
+                  class="mobile-nav-link flex items-center gap-3"
+                >
+
+                  <Icon
+                    name="mdi:phone-outline"
+                    width={20}
+                    height={20}
+                  />
+
+                  <span>
+                    096 502 7930
+                  </span>
+
+                </a>
+
+
+                <!-- ZALO -->
+                <a
+                  href="https://zalo.me/0965027930"
+                  class="mobile-nav-link flex items-center gap-3"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+
+                  <span>
+                    💬
+                  </span>
+
+                  <span>
+                    Nhắn zalo
+                  </span>
+
+                </a>
+
+
+                <!-- EMAIL -->
                 <a
                   href={`mailto:${identity.email}`}
                   class="mobile-nav-link flex items-center gap-3"
@@ -205,7 +329,9 @@ const { seo } = Astro.props;
                     height={20}
                   />
 
-                  <span>Liên hệ</span>
+                  <span>
+                    Email
+                  </span>
 
                 </a>
 
@@ -241,6 +367,7 @@ const { seo } = Astro.props;
           class="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between"
         >
 
+          <!-- BRAND -->
           <div>
 
             <div class="font-semibold">
@@ -254,12 +381,50 @@ const { seo } = Astro.props;
           </div>
 
 
-          <a
-            href={`mailto:${identity.email}`}
-            class="text-sm text-gray-500 hover:text-gray-900 transition-colors"
+          <!-- CONTACT LINKS -->
+          <div
+            class="flex flex-col sm:flex-row sm:items-center gap-3 text-sm text-gray-500"
           >
-            {identity.email}
-          </a>
+
+            <!-- PHONE -->
+            <a
+              href="tel:0965027930"
+              class="footer-contact-link"
+            >
+              096 502 7930
+            </a>
+
+
+            <span class="hidden sm:inline">
+              •
+            </span>
+
+
+            <!-- ZALO -->
+            <a
+              href="https://zalo.me/0965027930"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="footer-contact-link"
+            >
+              Nhắn Zalo
+            </a>
+
+
+            <span class="hidden sm:inline">
+              •
+            </span>
+
+
+            <!-- EMAIL -->
+            <a
+              href={`mailto:${identity.email}`}
+              class="footer-contact-link"
+            >
+              {identity.email}
+            </a>
+
+          </div>
 
         </div>
 
@@ -325,15 +490,16 @@ const { seo } = Astro.props;
 
   }
 
+
   .site-logo {
 
-  width: 200px;
+    width: 200px;
 
-  height: auto;
+    height: auto;
 
-  display: block;
+    display: block;
 
-}
+  }
 
 
   /* NAVIGATION */
@@ -366,30 +532,34 @@ const { seo } = Astro.props;
   }
 
 
-  /* EMAIL */
+  /* CONTACT */
 
-  .email-button {
+  .contact-button {
 
-    width: 42px;
-
-    height: 42px;
+    display: inline-flex;
 
     align-items: center;
 
-    justify-content: center;
+    gap: 7px;
+
+    padding: 9px 12px;
 
     border-radius: 9px;
 
     color: #4b4b46;
 
+    font-size: 14px;
+
     transition:
       background-color 200ms,
       color 200ms;
 
+    white-space: nowrap;
+
   }
 
 
-  .email-button:hover {
+  .contact-button:hover {
 
     background: #eeece5;
 
@@ -408,7 +578,8 @@ const { seo } = Astro.props;
 
     color: #3f3f3a;
 
-    transition: background-color 200ms;
+    transition:
+      background-color 200ms;
 
   }
 
@@ -443,7 +614,8 @@ const { seo } = Astro.props;
     box-shadow:
       0 20px 50px rgba(0, 0, 0, 0.10);
 
-    transition: opacity 200ms;
+    transition:
+      opacity 200ms;
 
     z-index: 50;
 
@@ -483,6 +655,21 @@ const { seo } = Astro.props;
     border-top: 1px solid #e4e2dc;
 
     background: #f3f1eb;
+
+  }
+
+
+  .footer-contact-link {
+
+    transition:
+      color 200ms;
+
+  }
+
+
+  .footer-contact-link:hover {
+
+    color: #171717;
 
   }
 
