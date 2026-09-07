@@ -5,33 +5,66 @@
 
 Priority: P0 = blocking, P1 = quan trọng, P2 = tăng trưởng, P3 = tối ưu sau.
 
-## P0 — Lead Capture Production Verification
+## DONE — Lead Capture Production Verification
 
 ### BL-LEAD-001 — Production E2E Lead Smoke Test
 
-**Status: PENDING**
+**Status: DONE — 2026-09-07**
 
-Flow cần verify:
+Production flow đã PASS:
 
-`baolocbds.com -> LeadCapture -> POST /api/leads -> Cloudflare runtime -> Supabase public.leads`
+`baolocbds.com -> LeadCapture -> POST /api/leads -> Cloudflare Worker -> Supabase public.leads`
 
 Test page: `/du-an/phu-gia-bao-loc/gia-ban/`
 
-Expected:
+Verified:
 
 - form submit thành công;
-- success UI hiển thị;
-- Supabase có record;
+- success UI: `Đã nhận thông tin. Mình sẽ liên hệ sớm.`;
+- Supabase có record mới;
 - `intent = bang-gia`;
 - `source_url = /du-an/phu-gia-bao-loc/gia-ban/`;
 - phone normalize E.164;
-- secret không xuất hiện client/browser bundle.
+- Cloudflare deploy PASS.
 
-Đây là **NEXT EXACT ACTION**.
+Deployment checkpoint: Worker `baolocbds`, Version ID `4dad9cd1-77fb-4d93-a597-0e9d9b8436e4`.
 
-### BL-LEAD-002 — Error handling
+Lead Capture V1 foundation chính thức DONE.
 
-Sau E2E PASS:
+## P1 — Lead conversion
+
+### BL-LEAD-010 — CTA intent mapping
+
+**Status: NEXT**
+
+Gắn LeadCapture có chọn lọc:
+
+- tổng quan -> `quan-tam-du-an`;
+- giá bán -> `bang-gia` — DONE;
+- chính sách -> `chinh-sach`;
+- mặt bằng -> `mat-bang`;
+- sản phẩm -> `san-pham`;
+- xem dự án -> `xem-du-an`;
+- tư vấn vay -> `tu-van-vay`.
+
+Không bắt khách chọn dropdown nếu intent có thể suy ra từ CTA. Không nhét form vào mọi page.
+
+Ưu tiên triển khai tiếp: Tổng quan -> Chính sách -> Mặt bằng.
+
+### BL-LEAD-011 — CTA strategy
+
+Các CTA ưu tiên:
+
+- Nhận bảng giá & giỏ hàng mới nhất
+- Nhận chính sách thanh toán
+- Nhận mặt bằng
+- Đăng ký xem dự án
+
+Giữ form tối giản: phone required, name optional.
+
+### BL-LEAD-002 — Error handling hardening
+
+Sau khi intent mapping ổn định:
 
 - invalid phone -> 400;
 - DB unavailable -> user-friendly error;
@@ -42,31 +75,6 @@ Sau E2E PASS:
 ### BL-LEAD-003 — Anti-spam foundation
 
 Chỉ làm khi có nhu cầu thực tế. Ưu tiên honeypot/rate limiting/duplicate suppression; chỉ thêm Turnstile khi spam xuất hiện. Không tăng friction sớm.
-
-## P1 — Lead conversion
-
-### BL-LEAD-010 — CTA intent mapping
-
-Gắn LeadCapture có chọn lọc:
-
-- tổng quan -> `quan-tam-du-an`;
-- giá bán -> `bang-gia`;
-- chính sách -> `chinh-sach`;
-- mặt bằng -> `mat-bang`;
-- sản phẩm -> `san-pham`;
-- xem dự án -> `xem-du-an`;
-- tư vấn vay -> `tu-van-vay`.
-
-Không bắt khách chọn dropdown nếu intent có thể suy ra từ CTA.
-
-### BL-LEAD-011 — CTA strategy
-
-Các CTA ưu tiên:
-
-- Nhận bảng giá & giỏ hàng mới nhất
-- Nhận chính sách thanh toán
-- Nhận mặt bằng
-- Đăng ký xem dự án
 
 ### BL-LEAD-012 — Lead operations
 
@@ -199,8 +207,9 @@ Hiện npm báo 11 vulnerabilities (2 moderate, 9 high). Review từng dependenc
 - Không hard-code Phú Gia Bảo Lộc vào reusable core.
 - Không copy nguyên sales copy ERA.
 - Không publish pháp lý/chính sách chưa kiểm chứng.
-- Không đánh dấu Lead Capture DONE trước production E2E PASS.
 
 ## NEXT
 
-**BL-LEAD-001 — Production E2E Lead Smoke Test.**
+**BL-LEAD-010 — CTA intent mapping.**
+
+Mở rộng LeadCapture có chọn lọc sang Tổng quan / Chính sách / Mặt bằng, mỗi vị trí mang intent riêng và vẫn giữ form tối giản.
