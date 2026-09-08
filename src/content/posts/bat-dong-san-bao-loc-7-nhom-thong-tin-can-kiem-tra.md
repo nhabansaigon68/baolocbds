@@ -8,8 +8,8 @@ category: "thi-truong"
 contentType: "guide"
 searchIntent: "kiem-tra-bat-dong-san-bao-loc-truoc-khi-mua"
 image:
-  url: "/logo.webp"
-  alt: "BAO LOC BDS - thông tin bất động sản Bảo Lộc"
+  url: "/images/posts/bat-dong-san-bao-loc-7-nhom-thong-tin-can-kiem-tra.svg"
+  alt: "Bất động sản Bảo Lộc - 7 nhóm thông tin nên kiểm tra trước khi xuống tiền"
 readingTime: 6
 ---
 

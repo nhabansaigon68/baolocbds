@@ -1,5 +1,4 @@
 ---
-import { Image } from "astro:assets";
 import Layout from "../layouts/Layout.astro";
 import { homePageContent, identity } from "../config";
 import SocialLink from "../components/SocialLink.astro";
@@ -268,20 +267,28 @@ const featuredProjects = (await getCollection("projects"))
     <div class="posts-grid">
 
       {
-        posts.map((post) => (
+        posts.map((post) => {
+          const postUrl =
+            post.data.category === "thi-truong"
+              ? `/thi-truong/${post.id}/`
+              : post.data.category === "tai-chinh"
+                ? `/tai-chinh/${post.id}/`
+                : `/blog/${post.id}/`;
 
-          <a
-            href={`/blog/${post.id}`}
-            class="post-card"
-          >
+          return (
+            <a
+              href={postUrl}
+              class="post-card"
+            >
 
-            <Image
-              src={post.data.image.url}
-              alt={post.data.title}
-              width={700}
-              height={450}
-              class="post-image"
-            />
+              <img
+                src={post.data.image.url}
+                alt={post.data.image.alt}
+                width="700"
+                height="450"
+                class="post-image"
+                loading="lazy"
+              />
 
             <div class="post-content">
 
@@ -305,9 +312,9 @@ const featuredProjects = (await getCollection("projects"))
 
             </div>
 
-          </a>
-
-        ))
+            </a>
+          );
+        })
       }
 
     </div>
