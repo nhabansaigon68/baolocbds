@@ -25,9 +25,31 @@ function normalizeVietnamPhone(value: unknown): string | null {
 }
 
 export const POST: APIRoute = async ({ request }) => {
-  try {
-    const body = await request.json();
+  let body: Record<string, unknown>;
 
+  try {
+    body = await request.json();
+  } catch (error) {
+    console.error(
+      "LEAD_CAPTURE_INVALID_REQUEST",
+      error,
+    );
+
+    return new Response(
+      JSON.stringify({
+        ok: false,
+        error: "INVALID_REQUEST",
+      }),
+      {
+        status: 400,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
+  }
+
+  try {
     const phoneRaw =
       typeof body.phone === "string"
         ? body.phone.trim()
@@ -157,10 +179,10 @@ export const POST: APIRoute = async ({ request }) => {
     return new Response(
       JSON.stringify({
         ok: false,
-        error: "INVALID_REQUEST",
+        error: "SERVER_ERROR",
       }),
       {
-        status: 400,
+        status: 500,
         headers: {
           "Content-Type": "application/json",
         },
