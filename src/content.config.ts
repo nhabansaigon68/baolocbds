@@ -17,11 +17,26 @@ const postsCollection = defineCollection({
     title: z.string(),
    
     pubDate: z.date(),
+    updatedAt: z.date().optional(),
     description: z.string(),
 
     author: z.string(),
 
     category: z.string(),
+
+    contentType: z
+      .enum([
+        "news",
+        "analysis",
+        "experience",
+        "review",
+        "guide",
+        "faq",
+      ])
+      .optional(),
+
+    searchIntent: z.string().optional(),
+    projectSlug: z.string().optional(),
 
     image: z.object({
       url: z.string(),
