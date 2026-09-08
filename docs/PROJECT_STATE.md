@@ -91,23 +91,38 @@ Commit: `12bf3e0` — `BL-LEAD-011: refine reusable project CTA strategy`.
 
 ## 6. Homepage
 
-Trang chủ đã lấy project nổi bật động từ collection `projects`. Phú Gia Bảo Lộc xuất hiện trong section dự án nổi bật mà không cần card hard-code riêng.
+Trang chủ đã lấy project nổi bật động từ collection `projects`.
+
+Ngày 2026-09-08 section bài viết đã được nâng từ 2 lên **4 bài mới nhất**.
+
+Posts sort theo:
+1. `publishedAt` nếu có;
+2. fallback `pubDate`.
+
+Điều này giải quyết trường hợp nhiều bài cùng ngày nhưng vẫn cần thứ tự xuất bản chính xác.
 
 ## 7. Media Phú Gia Bảo Lộc
 
-Asset đã chuẩn hóa tại `public/images/projects/phu-gia-bao-loc/`, gồm các ảnh semantic như:
+Asset project chuẩn hóa tại `public/images/projects/phu-gia-bao-loc/` với filename semantic.
 
-- `tong-quan.jpg`
-- `biet-thu-phu-gia-bao-loc.jpg`
-- `duong-noi-khu-phu-gia-bao-loc.jpg`
-- `canh-quan-ho-nuoc-phu-gia-bao-loc.jpg`
-- `khu-vui-choi-tre-em-phu-gia-bao-loc.jpg`
-- `thap-nghieng-pisa-phu-gia-bao-loc.jpg`
-- `tieu-canh-nghe-thuat-phu-gia-bao-loc.jpg`
-- `vuon-hoa-phu-gia-bao-loc.jpg`
-- `vuon-rau-canh-quan-phu-gia-bao-loc.jpg`
+Content media mới dùng pipeline riêng:
 
-Nguyên tắc: filename semantic + alt text theo nội dung thật.
+- WebP;
+- cạnh dài tối đa 1200px;
+- quality 78;
+- không upscale;
+- source/original không đưa vào `public`;
+- script `scripts/optimize-content-image.sh`;
+- Pillow chạy bằng local virtualenv `.venv-image`;
+- `.venv-image` không commit Git.
+
+Media bài viết đã có semantic assets như:
+
+- `bao-loc-khong-gian-song-nghi-duong.webp`;
+- `phu-gia-bao-loc-duong-noi-khu-thuc-te.webp`;
+- `phu-gia-bao-loc-khong-gian-tien-ich-song.webp`;
+- `phu-gia-bao-loc-canh-quan-tien-ich-thuc-te.webp`;
+- `phu-gia-bao-loc-so-do-san-pham.webp`.
 
 ## 8. SEO technical foundation
 
@@ -129,20 +144,20 @@ DONE:
 
 `robots.txt` trỏ tới `https://baolocbds.com/sitemap-index.xml`.
 
-Checkpoint gần nhất: `astro check` PASS 0 errors / 0 warnings / 0 hints; production build PASS.
-
 ### Google Search Console
 
 Ngày 2026-09-07:
+- Domain Property `baolocbds.com` verified bằng DNS TXT;
+- sitemap-index.xml submit thành công.
 
-- Domain Property `baolocbds.com` đã xác minh quyền sở hữu thành công.
-- Phương thức xác minh: DNS / Nhà cung cấp tên miền.
-- DNS TXT verification được lưu tại Cloudflare và phải được giữ nguyên.
-- Sitemap `https://baolocbds.com/sitemap-index.xml` đã submit thành công trong Google Search Console.
+Ngày 2026-09-08:
+- Search Console đã khám phá 22 URL;
+- 0 indexed tại thời điểm kiểm tra;
+- homepage ở trạng thái `Đã phát hiện thấy – hiện chưa được lập chỉ mục`;
+- chưa có lần crawl gần nhất;
+- đã gửi yêu cầu lập chỉ mục thủ công cho homepage.
 
-**BL-SEO-030 = DONE (foundation).**
-
-Theo dõi tiếp theo trong Search Console: discovery/indexing, coverage và search queries khi Google bắt đầu thu thập dữ liệu.
+Trạng thái này hiện được xem là bình thường trong giai đoạn rất sớm; ưu tiên tiếp tục content + internal linking thay vì can thiệp kỹ thuật vội.
 
 ## 9. Nguồn nội dung ERA Agent
 
@@ -155,38 +170,31 @@ Nguyên tắc:
 - pháp lý/chính sách quan trọng phải đối chiếu nguồn gốc;
 - ưu tiên fact-first và voice riêng của BAO LOC BDS.
 
-Các điểm hữu ích đã ghi nhận gồm: quy mô khoảng 9.12 ha, 357 sản phẩm, compound/gated community, QH 1/500, sổ hồng từng nền, vị trí/kết nối, tiện ích, chính sách thanh toán/vay.
-
-Số liệu như 9.1 ha và 9.12 ha cần reconciliation trước khi chuẩn hóa toàn site.
+Các số liệu như 9.1 ha / 9.12 ha phải reconcile trước khi chuẩn hóa toàn site.
 
 ## 10. Lead Capture V1 — quyết định sản phẩm
 
 Mục tiêu: SEO -> traffic -> lead với friction thấp.
 
 Visible fields:
-
-- Số điện thoại — bắt buộc.
+- Số điện thoại — bắt buộc;
 - Tên — optional.
 
 Không hỏi dropdown nhu cầu ở V1. `intent` suy ra từ CTA/page. `sourceUrl` tự ghi.
 
-Phone là string, normalize về E.164 `+84...`. Validation tồn tại ở client, server và DB.
+Phone normalize về E.164 `+84...`. Validation tồn tại ở client, server và DB.
 
 CTA intent mapping hiện tại:
-
 - Tổng quan -> `quan-tam-du-an`;
 - Giá bán -> `bang-gia`;
 - Chính sách -> `chinh-sach`;
 - Mặt bằng -> `mat-bang`.
 
-Mapping được khai báo reusable theo `pageSlug`, không nhét form vào mọi project page.
-
-Commit: `d009b58` — `BL-LEAD-010: add reusable CTA intent mapping`.
+Commit: `d009b58`.
 
 ## 11. Supabase lead storage
 
-Đã tạo `public.leads` với fields:
-
+`public.leads` gồm:
 - `id`
 - `phone_raw`
 - `phone_normalized`
@@ -195,156 +203,149 @@ Commit: `d009b58` — `BL-LEAD-010: add reusable CTA intent mapping`.
 - `source_url`
 - `created_at`
 
-Có constraint format `phone_normalized`, index phone và created_at, RLS enabled.
-
-Đã cấp quyền cho `service_role`:
-
-- SELECT, INSERT trên `public.leads`;
-- USAGE, SELECT trên `public.leads_id_seq`.
+RLS enabled. `service_role` có quyền cần thiết để API server ghi lead.
 
 ## 12. Secrets policy
 
-Local `.env` chứa:
+Local `.env` chứa server secrets và được `.gitignore` bảo vệ.
 
-- `SUPABASE_URL`
-- `SUPABASE_SECRET_KEY`
+Cloudflare Runtime Variables:
+- `SUPABASE_URL` = Text;
+- `SUPABASE_SECRET_KEY` = Secret.
 
-`.env` được `.gitignore` bảo vệ.
+Không commit hoặc expose secrets client-side.
 
-Cloudflare Runtime Variables đã cấu hình:
+## 13. Lead API
 
-- `SUPABASE_URL` = Text
-- `SUPABASE_SECRET_KEY` = Secret
+`src/pages/api/leads.ts` dùng native `fetch()` gọi Supabase REST.
 
-Secret chỉ server-side, không client-side, không commit GitHub, không ghi giá trị vào docs.
+Không dùng Supabase Realtime trong Lead V1.
 
-## 13. Supabase connectivity test
-
-Direct DB insert từ Node 20 đã PASS với record test `TEST LOCAL`.
-
-Điều này xác nhận URL, secret, Data API, permissions, table và DB constraint hoạt động.
-
-## 14. Lead API
-
-Đã tạo `src/pages/api/leads.ts`, `POST /api/leads`, `prerender = false`.
-
-API thực hiện parse/validate/normalize/sanitize và insert Supabase qua REST bằng native `fetch()`.
-
-Không dùng Supabase Realtime trong Lead V1. Quyết định này giảm dependency runtime và tránh WebSocket requirement trên Node 20.
-
-Package `ws` từng được cài chỉ để diagnostic, sau đó đã gỡ. `@supabase/supabase-js` cũng đã được gỡ vì Lead API cuối cùng dùng native REST `fetch()`.
-
-Ngày 2026-09-08, `BL-LEAD-002` hardening hoàn tất:
-
-- invalid JSON request -> `400 INVALID_REQUEST`;
+Error semantics hiện tại:
+- invalid JSON -> `400 INVALID_REQUEST`;
 - invalid phone -> `400 INVALID_PHONE`;
 - Supabase non-ok -> `500 SAVE_FAILED`;
-- unexpected server/network exception -> `500 SERVER_ERROR`;
-- không còn gán nhầm exception phía server thành `400 INVALID_REQUEST`.
+- unexpected exception -> `500 SERVER_ERROR`.
 
-Commit API hardening: `e966d45` — `BL-LEAD-002: separate client and server API errors`.
+## 14. LeadCapture component
 
-## 15. LeadCapture component
-
-`src/components/LeadCapture.astro` hiện có:
-
+`src/components/LeadCapture.astro` có:
 - phone required;
 - name optional;
 - intent prop;
 - source URL tự ghi;
 - client validation;
 - submit loading state;
-- disable button trong lúc gửi để tránh submit lặp;
+- disable button khi gửi;
 - success/error feedback;
-- responsive mobile 1 cột;
-- xử lý explicit `INVALID_PHONE` từ API;
-- fallback an toàn khi API response không phải JSON;
-- khôi phục đúng CTA label gốc sau submit.
+- responsive mobile;
+- safe response parsing;
+- restore đúng CTA label.
 
-UI error chung giữ copy thân thiện: `Chưa gửi được. Bạn thử lại hoặc liên hệ Zalo giúp mình.`
+## 15. Lead Capture V1 — PRODUCTION E2E PASS
 
-Commits hardening client:
-
-- `14b0b2a` — preserve lead CTA button label;
-- `4136a05` — handle invalid phone responses;
-- `c6447b2` — handle invalid API responses safely.
-
-## 16. Lead Capture V1 — PRODUCTION E2E PASS
-
-Ngày 2026-09-07 đã deploy production và smoke-test thành công toàn bộ flow:
+Production flow đã PASS:
 
 `baolocbds.com -> LeadCapture -> POST /api/leads -> Cloudflare Worker -> Supabase public.leads -> success UI`
 
-Kết quả xác minh:
-
-- production build PASS;
-- Wrangler deploy PASS;
-- form trên `/du-an/phu-gia-bao-loc/gia-ban/` submit thành công;
-- UI trả: `Đã nhận thông tin. Mình sẽ liên hệ sớm.`;
-- record mới xuất hiện trong Supabase;
-- `intent = bang-gia`;
-- `source_url = /du-an/phu-gia-bao-loc/gia-ban/`;
-- phone normalize đúng E.164.
-
-Cloudflare deployment checkpoint:
-
+Worker checkpoint:
 - Worker: `baolocbds`
 - Version ID: `4dad9cd1-77fb-4d93-a597-0e9d9b8436e4`
 
-**BL-LEAD-001 = DONE. Lead Capture V1 foundation = DONE.**
+**Lead Capture V1 foundation = DONE.**
 
-## 17. Lead conversion checkpoint 2026-09-08
+## 16. Content Engine foundation — DONE
 
-DONE:
+Ngày 2026-09-08, `BL-CONTENT-050` foundation hoàn tất.
 
-- `BL-LEAD-010` — CTA intent mapping;
-- `BL-LEAD-011` — reusable project CTA strategy;
-- `BL-LEAD-002` — error handling hardening.
+Posts collection hiện hỗ trợ:
+- `title`;
+- `pubDate`;
+- `publishedAt` optional cho thứ tự chính xác;
+- `updatedAt`;
+- `description`;
+- `author`;
+- `category`;
+- `contentType`;
+- `searchIntent`;
+- `projectSlug`;
+- image `{ url, alt }`;
+- `readingTime`.
 
-Validation gần nhất:
+Đã có:
+- article detail editorial layout cho `/thi-truong/[slug]`;
+- cover image trong article;
+- typography lists;
+- reusable `PostRecommendations.astro`;
+- Related + Latest sections;
+- homepage article cards;
+- routing theo category;
+- precise publication ordering trên homepage;
+- build và visual smoke PASS.
 
-- `npm run build`: PASS;
-- 4 intent smoke tests: PASS;
-- Hero 3 CTA smoke tests: PASS;
-- invalid phone smoke test: PASS;
-- success flow giữ đúng success copy và CTA label: PASS;
-- local branch sạch và đồng bộ sau commit `e966d45`.
+Foundation commits tiêu biểu:
+- `7e3dbbd` — schema extension;
+- `ffc67c7` — seed/editorial presentation;
+- `da3a5eb` — homepage route + covers;
+- `1ee83a1` — recommendations;
+- `d0f8233` — WebP image standard.
 
-Anti-spam và lead operations chưa làm; chỉ mở khi có nhu cầu thực tế để tránh overbuild.
+## 17. Editorial cluster — current state
 
-## 18. Content Engine direction
+Hiện đã có **7 bài content thật**:
 
-Ngày 2026-09-08 chốt hướng mở rộng nội dung: BAO LOC BDS không chỉ có project fact pages mà cần thêm lớp editorial/search-intent để xây topical authority và đa dạng organic entry points.
+1. Bất động sản Bảo Lộc: 7 nhóm thông tin nên kiểm tra trước khi xuống tiền
+2. Đất Bảo Lộc: 5 lỗi thường gặp khi chỉ nhìn giá rẻ
+3. Mua đất Bảo Lộc nên kiểm tra pháp lý gì?
+4. Bảo Lộc phù hợp để ở, nghỉ dưỡng hay đầu tư?
+5. Phú Gia Bảo Lộc ở đâu? Cách nhìn vị trí đúng hơn quảng cáo
+6. Phú Gia Bảo Lộc phù hợp với ai?
+7. Những điều nên kiểm tra trước khi xem Phú Gia Bảo Lộc
 
-Content engine dự kiến gồm:
+Bài #7:
+- có `publishedAt: 2026-09-08T15:00:00+07:00`;
+- cover thực địa WebP;
+- ảnh sơ đồ sản phẩm chen trong body;
+- build PASS;
+- desktop/mobile visual PASS;
+- commit `42da043` — `BL-CONTENT-053: add Phu Gia viewing checklist and latest-post ordering`.
+
+Kế hoạch initial batch 10 bài còn:
+
+8. Trải nghiệm Phú Gia Bảo Lộc: những điều đáng chú ý khi đến dự án — chỉ viết khi đủ tư liệu thật.
+9. Cách đọc chính sách thanh toán dự án BĐS.
+10. Hạ tầng Bảo Lộc: phân biệt cái đã có và cái còn là kỳ vọng.
+
+## 18. Content principles
+
+Content engine theo 4 lớp:
 
 1. Project facts — nguồn thông tin chuẩn, fact-first;
-2. Experience / Review — trải nghiệm, ghi nhận thực địa, ưu/nhược điểm, không giả trải nghiệm;
-3. Question / Search intent — trả lời truy vấn dài và câu hỏi thực tế;
-4. Market context — kết nối dự án với thị trường, hạ tầng và câu chuyện Bảo Lộc.
+2. Experience / Review — trải nghiệm thật, không giả;
+3. Question / Search intent — truy vấn dài và câu hỏi thực tế;
+4. Market context — kết nối dự án với thị trường và Bảo Lộc.
 
 Nguyên tắc:
-
 - không copy Facebook/sales copy thành bài SEO;
-- không tạo hàng loạt bài mỏng chỉ để tăng URL;
+- không tạo hàng loạt bài mỏng;
 - cảm nhận phải phân biệt với fact;
-- fact pháp lý/giá/chính sách phải kiểm chứng và có ngày cập nhật khi cần;
-- ưu tiên ảnh/ghi nhận thực tế và nội dung gốc;
-- internal linking phải đưa authority về project hub và liên kết sang market/finance content;
-- core posts phải tái sử dụng cho nhiều dự án, không hard-code Phú Gia Bảo Lộc.
-
-Bài gợi ý `Trải nghiệm Phú Gia Bảo Lộc – nơi ấn tượng ngay từ lần đầu đặt chân đến` được xem là seed idea, không phải nội dung để copy trực tiếp.
+- pháp lý/giá/chính sách phải kiểm chứng;
+- ưu tiên ảnh/ghi nhận thực tế;
+- internal linking phải đưa authority về project hub;
+- core posts phải tái sử dụng cho nhiều dự án.
 
 ## 19. Known issues / technical debt
 
-- `posts` collection hiện trống; build có message ở dynamic routes Thị trường/Tài chính nhưng không fail.
-- project hero image trong project route vẫn hard-code đường dẫn Phú Gia Bảo Lộc; technical debt cũ, chưa xử lý.
-- npm hiện báo 11 vulnerabilities (2 moderate, 9 high). Không dùng `npm audit fix --force`; cần review có kiểm soát sau.
+- project hero image trong project route vẫn hard-code đường dẫn Phú Gia Bảo Lộc;
+- `PostRecommendations` và các list route khác hiện vẫn cần kiểm tra để chuẩn hóa cùng logic `publishedAt ?? pubDate` nếu muốn semantics `latest` hoàn toàn thống nhất;
+- Related/Latest có thể cần dedupe khi content nhiều hơn;
+- `/tai-chinh/[slug]` chưa được unify hoàn toàn với editorial presentation của `/thi-truong/[slug]`;
+- npm hiện báo 11 vulnerabilities (2 moderate, 9 high). Không dùng `npm audit fix --force`.
 
 ## 20. Next exact action
 
-**BL-CONTENT-050 — Posts collection foundation.**
+**BL-CONTENT-053 — Bài #8 trong editorial cluster.**
 
-Đọc hiện trạng content collections, routes `/thi-truong` và `/tai-chinh`, schema hiện có trước khi sửa.
+Trước khi viết bài trải nghiệm Phú Gia Bảo Lộc, rà lại media thật đang có (ảnh/video thực địa) và chỉ dùng chi tiết có bằng chứng trực quan hoặc ghi nhận thực tế.
 
-Mục tiêu: thiết kế Posts collection thành content engine tái sử dụng, hỗ trợ editorial/search-intent, metadata SEO và liên kết project bằng dữ liệu động; không hard-code Phú Gia Bảo Lộc vào core.
+Nếu tư liệu chưa đủ để tạo một bài experience đúng nghĩa, không ép viết. Chuyển sang bài #9 `Cách đọc chính sách thanh toán dự án BĐS` để giữ chuẩn fact-first.
