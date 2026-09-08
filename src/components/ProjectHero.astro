@@ -6,6 +6,8 @@ interface Props {
   location?: string;
   status?: string;
   priceUrl?: string;
+  visitUrl?: string;
+  zaloUrl?: string;
 }
 
 const {
@@ -15,6 +17,8 @@ const {
   location,
   status,
   priceUrl,
+  visitUrl,
+  zaloUrl,
 } = Astro.props;
 ---
 
@@ -61,14 +65,22 @@ const {
           </a>
         )}
 
-        <a
-          href="https://zalo.me/0965027930"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="hero-button hero-button-secondary"
-        >
-          Zalo tư vấn
-        </a>
+        {visitUrl && (
+          <a href={visitUrl} class="hero-button hero-button-secondary">
+            Đăng ký xem dự án
+          </a>
+        )}
+
+        {zaloUrl && (
+          <a
+            href={zaloUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="hero-button hero-button-secondary"
+          >
+            Zalo tư vấn
+          </a>
+        )}
       </div>
 
     </div>

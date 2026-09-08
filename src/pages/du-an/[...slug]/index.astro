@@ -5,6 +5,7 @@ import ProjectHero from "../../../components/ProjectHero.astro";
 import { getCollection, render } from "astro:content";
 import ProjectNav from "../../../components/ProjectNav.astro";
 import LeadCapture from "../../../components/LeadCapture.astro";
+import { contactLinks } from "../../../config";
 
 export const prerender = true;
 
@@ -128,7 +129,9 @@ const leadCapture = leadCaptureByPage[pageSlug];
       image="/images/projects/phu-gia-bao-loc/tong-quan.jpg"
       location={project.data.location}
       status={project.data.status}
-      priceUrl="/du-an/phu-gia-bao-loc/gia-ban/"
+      priceUrl={`/du-an/${projectSlug}/gia-ban/`}
+      visitUrl={`/du-an/${projectSlug}/#lead-form-quan-tam-du-an`}
+      zaloUrl={contactLinks.zalo}
     />
   <ProjectNav projectSlug={projectSlug} />
   <main class="mt-10 max-w-4xl mx-auto px-6">

@@ -14,6 +14,12 @@ export const identity: Identity = {
   email: "thienphuocera@gmail.com",
 };
 
+export const contactLinks = {
+  phone: "tel:0965027930",
+  zalo: "https://zalo.me/0965027930",
+  email: "mailto:thienphuocera@gmail.com",
+};
+
 export const navBarLinks: NavBarLink[] = [
   {
     title: "Trang chủ",
@@ -42,19 +48,19 @@ export const navBarLinks: NavBarLink[] = [
 export const socialLinks: SocialLink[] = [
   {
     title: "096 502 7930",
-    url: "tel:0965027930",
+    url: contactLinks.phone,
     icon: "mdi:phone",
   },
   
   {
     title: "Nhắn tin zalo",
-    url: "https://zalo.me/0965027930",
+    url: contactLinks.zalo,
     external: true,
   },
   
   {
     title: "Email",
-    url: "mailto:thienphuocera@gmail.com",
+    url: contactLinks.email,
     icon: "mdi:email",
   },
 ];
