@@ -15,143 +15,84 @@ Production flow đã PASS:
 
 `baolocbds.com -> LeadCapture -> POST /api/leads -> Cloudflare Worker -> Supabase public.leads`
 
-Test page: `/du-an/phu-gia-bao-loc/gia-ban/`
-
-Verified: form submit, success UI, Supabase record, `intent = bang-gia`, source URL, E.164 phone normalization và Cloudflare deployment đều PASS.
-
-Deployment checkpoint: Worker `baolocbds`, Version ID `4dad9cd1-77fb-4d93-a597-0e9d9b8436e4`.
-
-Lead Capture V1 foundation chính thức DONE.
-
-## DONE — SEO Foundation Registration
-
-### BL-SEO-030 — Google Search Console
-
-**Status: DONE — 2026-09-07**
-
-- Domain Property `baolocbds.com` verified.
-- Verification bằng DNS TXT tại Cloudflare.
-- Không xóa TXT verification record.
-- Sitemap `https://baolocbds.com/sitemap-index.xml` đã submit thành công.
-
-Theo dõi tiếp theo là indexing/coverage/query khi Search Console bắt đầu có dữ liệu; đây là monitoring, không còn blocking setup.
-
-## DONE — Lead conversion foundation
-
-### BL-LEAD-010 — CTA intent mapping
-
-**Status: DONE — 2026-09-08**
-
-Đã chuyển project route từ điều kiện riêng cho `gia-ban` sang reusable `leadCaptureByPage` mapping theo `pageSlug`.
-
-Mapping đang hoạt động:
-
-- tổng quan -> `quan-tam-du-an`;
-- giá bán -> `bang-gia`;
-- chính sách -> `chinh-sach`;
-- mặt bằng -> `mat-bang`.
-
-Mỗi mapping có title và button label riêng. Không bắt khách chọn dropdown nếu intent có thể suy ra từ CTA/page.
-
-Validation:
-
-- `npm run build`: PASS;
-- DEV static smoke-test Tổng quan: PASS;
-- DEV static smoke-test Giá bán: PASS;
-- DEV static smoke-test Chính sách: PASS;
-- DEV static smoke-test Mặt bằng: PASS.
-
-Commit: `d009b58` — `BL-LEAD-010: add reusable CTA intent mapping`.
-
-Không nhét form vào mọi page. Các intent `san-pham`, `xem-du-an`, `tu-van-vay` chỉ bổ sung khi có CTA/use case thật.
-
-### BL-LEAD-011 — CTA strategy
-
-**Status: DONE — 2026-09-08**
-
-Đã hoàn thiện CTA architecture cho project hero theo hướng reusable:
-
-- giữ `Xem giá bán`;
-- thêm `Đăng ký xem dự án`;
-- giữ `Zalo tư vấn`;
-- `ProjectHero` nhận `priceUrl`, `visitUrl`, `zaloUrl` qua props;
-- Zalo URL được đưa ra `contactLinks` trong config, không còn hard-code trong reusable component;
-- `priceUrl` được tạo động theo `projectSlug`;
-- `Đăng ký xem dự án` cuộn xuống LeadCapture Tổng quan qua anchor, không tạo thêm form trong Hero;
-- intent Tổng quan vẫn giữ `quan-tam-du-an` để không phá mapping đã freeze ở BL-LEAD-010.
-
-Validation:
-
-- `npm run build`: PASS;
-- Hero hiển thị đủ 3 CTA: PASS;
-- `Đăng ký xem dự án` -> LeadCapture Tổng quan: PASS;
-- `Xem giá bán` -> trang giá bán: PASS;
-- `Zalo tư vấn`: PASS.
-
-Commit: `12bf3e0` — `BL-LEAD-011: refine reusable project CTA strategy`.
-
-Ghi chú kiến trúc còn tồn tại: project hero image vẫn đang hard-code đường dẫn Phú Gia Bảo Lộc trong project route; đây là technical debt cũ, không mở rộng scope trong BL-LEAD-011.
+Verified: form submit, success UI, Supabase record, intent mapping, source URL, E.164 phone normalization và Cloudflare deployment đều PASS.
 
 ### BL-LEAD-002 — Error handling hardening
 
 **Status: DONE — 2026-09-08**
 
-Đã harden Lead Capture theo hướng nhỏ, không tăng friction và không phá DEV static / Cloudflare production architecture:
+DONE:
+- client/server phone validation;
+- `INVALID_PHONE`, `INVALID_REQUEST`, `SAVE_FAILED`, `SERVER_ERROR`;
+- disable submit khi gửi;
+- restore đúng CTA label;
+- safe parse khi API không trả JSON;
+- mobile form responsive.
 
-- client và server cùng validate phone; invalid phone trả `400 INVALID_PHONE`;
-- client xử lý explicit `INVALID_PHONE`, focus lại input và hiển thị copy thân thiện;
-- submit button disable trong lúc gửi để tránh submit lặp và hiển thị `Đang gửi...`;
-- sau submit luôn khôi phục đúng label CTA gốc thay vì hard-code `Gửi cho tôi`;
-- response API không phải JSON được fallback an toàn, không làm vỡ form;
-- request JSON lỗi trả `400 INVALID_REQUEST`;
-- exception bất ngờ phía server/network trả `500 SERVER_ERROR` thay vì bị gán nhầm lỗi client;
-- lỗi lưu/Supabase tiếp tục hiển thị user-friendly error ở UI;
-- mobile form đã có responsive 1 cột, input/button tối thiểu 48px.
+### BL-LEAD-010 — CTA intent mapping
 
-Validation:
+**Status: DONE — 2026-09-08**
 
-- `npm run build`: PASS sau từng patch;
-- invalid phone smoke-test: PASS;
-- success flow giữ nguyên copy thành công và label CTA: PASS.
+Mapping hiện tại:
+- tổng quan -> `quan-tam-du-an`;
+- giá bán -> `bang-gia`;
+- chính sách -> `chinh-sach`;
+- mặt bằng -> `mat-bang`.
 
-Commits:
+### BL-LEAD-011 — CTA strategy
 
-- `14b0b2a` — `BL-LEAD-002: preserve lead CTA button label`;
-- `4136a05` — `BL-LEAD-002: handle invalid phone responses`;
-- `c6447b2` — `BL-LEAD-002: handle invalid API responses safely`;
-- `e966d45` — `BL-LEAD-002: separate client and server API errors`.
+**Status: DONE — 2026-09-08**
+
+Project hero hiện có:
+- `Xem giá bán`;
+- `Đăng ký xem dự án`;
+- `Zalo tư vấn`.
+
+CTA architecture reusable, không hard-code link Zalo trong component.
+
+## DONE — SEO Foundation Registration
+
+### BL-SEO-030 — Google Search Console
+
+**Status: DONE — foundation 2026-09-07**
+
+- Domain Property verified bằng DNS TXT.
+- Sitemap `https://baolocbds.com/sitemap-index.xml` submit thành công.
+- Search Console ngày 2026-09-08 đã khám phá 22 URL, 0 indexed.
+- Homepage đang ở trạng thái `Đã phát hiện thấy – hiện chưa được lập chỉ mục`, chưa có lần crawl gần nhất.
+- Đã gửi yêu cầu lập chỉ mục thủ công cho homepage ngày 2026-09-08.
+
+Không xem đây là lỗi kỹ thuật ở thời điểm hiện tại; tiếp tục theo dõi crawl/indexing trong vài ngày tới.
 
 ## P1 — Lead conversion
 
 ### BL-LEAD-003 — Anti-spam foundation
 
-Chỉ làm khi có nhu cầu thực tế. Ưu tiên honeypot/rate limiting/duplicate suppression; chỉ thêm Turnstile khi spam xuất hiện. Không tăng friction sớm.
+Chỉ làm khi có spam thật. Ưu tiên honeypot/rate limiting/duplicate suppression; chỉ thêm Turnstile khi cần.
 
 ### BL-LEAD-012 — Lead operations
 
-Sau khi bắt đầu có lead thật, thiết kế workflow tối thiểu: xem lead mới, thông báo, đã liên hệ, ghi chú, trạng thái. Chưa xây CRM lớn trong V1.
+Sau khi có lead thật, thiết kế workflow tối thiểu: lead mới, đã liên hệ, ghi chú, trạng thái. Không xây CRM lớn trong V1.
 
 ## P1 — Phú Gia Bảo Lộc Content Upgrade
 
 ### BL-PGBL-020 — Project Fact Sheet / Source of Truth
 
-Chuẩn hóa fact sheet trước khi mở rộng content: tên pháp lý/thương mại, chủ đầu tư/pháp nhân, địa chỉ/toạ độ, diện tích, số lượng sản phẩm, QH 1/500, pháp lý, loại sản phẩm, tiến độ, chính sách, ngân hàng hỗ trợ.
+Chuẩn hóa fact sheet trước khi publish claim quan trọng: tên pháp lý/thương mại, chủ đầu tư/pháp nhân, địa chỉ/toạ độ, diện tích, số lượng sản phẩm, QH 1/500, pháp lý, loại sản phẩm, tiến độ, chính sách, ngân hàng hỗ trợ.
 
-Reconcile các số liệu khác nhau như 9.1 ha / 9.12 ha trước khi chuẩn hóa toàn site.
-
-Ưu tiên nguồn: hồ sơ pháp lý -> tài liệu chủ đầu tư -> tài liệu phân phối chính thức -> ERA internal material -> nguồn web ngoài.
+Reconcile số liệu như 9.1 ha / 9.12 ha trước khi chuẩn hóa toàn site.
 
 ### BL-PGBL-021 — Tổng quan content pass
 
-Bổ sung fact/USP hữu ích từ ERA và nguồn chính thức sau khi verify; không biến trang thành sales landing sáo rỗng.
+Bổ sung fact/USP hữu ích từ nguồn chính thức sau khi verify; không biến trang thành sales copy.
 
 ### BL-PGBL-022 — Vị trí content pass
 
-Phát triển cấu trúc kết nối 5 phút / 10 phút / liên vùng; bổ sung POI và thời gian di chuyển khi có nguồn đáng tin.
+Bổ sung POI, thời gian di chuyển và kết nối khi có nguồn đáng tin.
 
 ### BL-PGBL-023 — Pháp lý content pass
 
-Ưu tiên quy hoạch, hồ sơ pháp lý, quyền sử dụng đất, xây dựng, thông tin sổ. Chỉ publish claim đã kiểm chứng.
+Ưu tiên quy hoạch, hồ sơ pháp lý, quyền sử dụng đất, xây dựng, sổ; chỉ publish claim đã kiểm chứng.
 
 ### BL-PGBL-024 — Tiện ích content pass
 
@@ -159,11 +100,11 @@ Khai thác tiện ích nội khu, cảnh quan, trải nghiệm sống và bộ �
 
 ### BL-PGBL-025 — Chính sách content pass
 
-Khai thác tiến độ thanh toán, vay, ân hạn, ưu đãi khi còn hiệu lực. Nội dung có tính thời điểm phải có ngày cập nhật.
+Khai thác tiến độ thanh toán, vay, ân hạn, ưu đãi khi còn hiệu lực; nội dung time-sensitive phải có ngày cập nhật.
 
 ### BL-PGBL-026 — FAQ search intent
 
-Xây FAQ từ câu hỏi khách thực sự tìm: vị trí, chủ đầu tư, pháp lý, sổ, giá, vay, diện tích, khoảng cách trung tâm, xây dựng, chính sách. Không nhồi keyword.
+Xây FAQ từ câu hỏi thật: vị trí, chủ đầu tư, pháp lý, sổ, giá, vay, diện tích, khoảng cách trung tâm, xây dựng, chính sách.
 
 ## P1 — SEO
 
@@ -173,11 +114,24 @@ Kiểm tra production WebSite, Organization, BreadcrumbList; URL tuyệt đối 
 
 ### BL-SEO-032 — Project metadata
 
-Mỗi subpage cần title/description/canonical/OG image/heading intent riêng; tránh metadata chung cho cả cluster.
+Mỗi subpage cần title/description/canonical/OG image/heading intent riêng.
 
 ### BL-SEO-033 — Image SEO
 
-Semantic filename, alt text thật, dimensions, lazy loading phù hợp, WebP/AVIF nếu pipeline tương thích máy cũ.
+**Status: FOUNDATION DONE — 2026-09-08**
+
+Đã thiết lập pipeline ảnh content chuẩn:
+- WebP thật;
+- cạnh dài tối đa 1200px;
+- quality 78;
+- không upscale;
+- filename semantic;
+- alt text thật;
+- không giữ source/original trong `public`;
+- script: `scripts/optimize-content-image.sh`;
+- Pillow chạy trong `.venv-image`, không đụng Python system.
+
+Tiếp tục áp dụng cho toàn bộ ảnh content mới.
 
 ### BL-SEO-034 — Internal linking
 
@@ -187,39 +141,59 @@ Tạo topical graph: Homepage <-> Project <-> project subpages <-> market articl
 
 ### BL-HOME-040 — Featured Project Card Content
 
-Project đã lấy động. Tiếp tục bổ sung summary, CTA, location/status, project hub link và mobile conversion.
+Project đã lấy động từ collection.
+
+Ngày 2026-09-08 homepage đã nâng section bài viết từ 2 lên **4 bài mới nhất** và sort theo `publishedAt` chính xác, fallback về `pubDate`.
+
+Còn lại: refine CTA, location/status, mobile conversion nếu cần.
 
 ## P1 — Content Engine
 
-### BL-CONTENT-050 — Posts collection
+### BL-CONTENT-050 — Posts collection foundation
 
-**Status: NEXT**
+**Status: DONE — 2026-09-08**
 
-Collection `posts` hiện trống. Thiết lập content engine thật thay dummy/Test posts và xử lý build message ở `/tai-chinh/[slug]` và `/thi-truong/[slug]`.
-
-Mục tiêu không phải viết hàng loạt bài mỏng, mà tạo lớp editorial/search-intent có cấu trúc, tái sử dụng cho nhiều dự án.
-
-Schema cần hướng tới các metadata tối thiểu như: `title`, `description`, `publishedAt`, `updatedAt`, `cover`, `category`, và khả năng liên kết bài với project bằng dữ liệu động thay vì hard-code.
+Đã hoàn thiện foundation:
+- `src/content/posts/` hoạt động;
+- schema mở rộng `updatedAt`, `publishedAt`, `contentType`, `searchIntent`, `projectSlug`;
+- article detail editorial layout;
+- cover image trong article;
+- bullet/ordered-list typography;
+- homepage routing đúng theo category;
+- `PostRecommendations.astro` cho Related + Latest;
+- related/latest smoke test với nhiều bài;
+- homepage tự lấy bài mới nhất;
+- build PASS.
 
 ### BL-CONTENT-053 — Project Editorial / Experience Cluster
 
-Sau khi Posts collection foundation ổn định, mở cluster bài viết cho Phú Gia Bảo Lộc theo 4 nhóm:
-
-1. Experience / review thực địa;
-2. câu hỏi và search intent;
-3. góc nhìn ra quyết định, phù hợp/không phù hợp;
-4. market context kết nối dự án với Bảo Lộc.
+**Status: IN PROGRESS**
 
 Nguyên tắc:
-
-- không copy sales post thành bài SEO;
+- không copy sales post;
 - không giả trải nghiệm;
-- cảm nhận phải phân biệt với fact;
-- fact pháp lý, giá, chính sách phải có nguồn và ngày cập nhật khi cần;
-- ưu tiên ảnh/ghi nhận thực tế, nội dung gốc và internal linking về project hub;
-- mỗi bài phải có search intent hoặc vai trò topical authority rõ ràng.
+- fact và cảm nhận phải tách biệt;
+- pháp lý/giá/chính sách cần source + ngày cập nhật khi cần;
+- ưu tiên ảnh thực địa, media semantic và internal linking;
+- mỗi bài phải có search intent hoặc vai trò topical authority rõ.
 
-Bài seed đầu tiên dự kiến: `Trải nghiệm Phú Gia Bảo Lộc: những điều đáng chú ý khi đến dự án` — chỉ publish khi có đủ tư liệu/ghi nhận phù hợp.
+#### Published/committed seed articles
+
+1. `Bất động sản Bảo Lộc: 7 nhóm thông tin nên kiểm tra trước khi xuống tiền`
+2. `Đất Bảo Lộc: 5 lỗi thường gặp khi chỉ nhìn giá rẻ`
+3. `Mua đất Bảo Lộc nên kiểm tra pháp lý gì?`
+4. `Bảo Lộc phù hợp để ở, nghỉ dưỡng hay đầu tư?`
+5. `Phú Gia Bảo Lộc ở đâu? Cách nhìn vị trí đúng hơn quảng cáo`
+6. `Phú Gia Bảo Lộc phù hợp với ai?`
+7. `Những điều nên kiểm tra trước khi xem Phú Gia Bảo Lộc`
+
+Bài #7 đã có cover thực địa + ảnh sơ đồ sản phẩm chen trong body.
+
+#### Planned initial 10-post batch
+
+8. `Trải nghiệm Phú Gia Bảo Lộc: những điều đáng chú ý khi đến dự án` — chỉ publish khi đủ tư liệu thực tế.
+9. `Cách đọc chính sách thanh toán dự án BĐS`
+10. `Hạ tầng Bảo Lộc: phân biệt cái đã có và cái còn là kỳ vọng`
 
 ### BL-CONTENT-051 — Thị trường Bảo Lộc
 
@@ -243,17 +217,17 @@ Theo dõi click Zalo, phone, open lead form, successful lead và project engagem
 
 ### BL-ARCH-070 — Multi-project reusability
 
-Tiếp tục nguyên tắc không hard-code Phú Gia Bảo Lộc trong reusable core. ProjectHero, ProjectNav, LeadCapture và intent phải tái sử dụng được cho dự án khác.
+Tiếp tục nguyên tắc không hard-code Phú Gia Bảo Lộc trong reusable core.
 
 ## P3 — Security / Hardening
 
 ### BL-SEC-080 — Supabase privileges review
 
-Sau Lead V1: review least privilege, RLS và production secrets; tuyệt đối không expose secret client-side.
+Review least privilege, RLS và production secrets sau Lead V1.
 
 ### BL-SEC-081 — Dependency audit
 
-Hiện npm báo 11 vulnerabilities (2 moderate, 9 high). Review từng dependency theo exploitability, production exposure, Node 20 và Big Sur compatibility. Không chạy `npm audit fix --force`.
+Hiện npm báo 11 vulnerabilities (2 moderate, 9 high). Review theo exploitability và compatibility. Không chạy `npm audit fix --force`.
 
 ## DO NOT DO
 
@@ -261,17 +235,17 @@ Hiện npm báo 11 vulnerabilities (2 moderate, 9 high). Review từng dependenc
 - Không nâng macOS chỉ để chạy Cloudflare local.
 - Không ép workerd chạy trên Big Sur.
 - Không chuyển DEV static sang server chỉ để smoke-test.
-- Không commit `.env`.
+- Không commit `.env` hoặc `.venv-image`.
 - Không expose server secrets client-side.
-- Không cho browser dùng server secret để ghi Supabase.
 - Không chạy `npm audit fix --force`.
 - Không hard-code Phú Gia Bảo Lộc vào reusable core.
-- Không copy nguyên sales copy ERA.
+- Không copy sales copy ERA.
 - Không publish pháp lý/chính sách chưa kiểm chứng.
-- Không tạo hàng loạt bài SEO mỏng chỉ để tăng số URL.
+- Không tạo hàng loạt bài SEO mỏng chỉ để tăng URL.
+- Không đưa ảnh raw/original nặng trực tiếp vào `public` nếu chưa tối ưu.
 
 ## NEXT
 
-**BL-CONTENT-050 — Posts collection foundation.**
+**BL-CONTENT-053 — Bài #8 trong editorial cluster.**
 
-Đọc hiện trạng content collections, routes `/thi-truong` và `/tai-chinh`, cùng schema hiện có trước khi sửa. Thiết kế Posts collection thành content engine tái sử dụng, hỗ trợ editorial/search-intent và liên kết project bằng dữ liệu động; không hard-code Phú Gia Bảo Lộc vào core.
+Trước khi viết bài trải nghiệm Phú Gia Bảo Lộc, rà lại bộ ảnh/video thực tế hiện có và chỉ dùng những chi tiết có bằng chứng trực quan hoặc ghi nhận thật. Nếu tư liệu chưa đủ để viết một bài experience đúng nghĩa, chuyển sang bài #9 `Cách đọc chính sách thanh toán dự án BĐS` thay vì giả trải nghiệm.
