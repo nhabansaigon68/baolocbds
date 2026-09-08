@@ -65,28 +65,42 @@ Commit: `d009b58` — `BL-LEAD-010: add reusable CTA intent mapping`.
 
 Không nhét form vào mọi page. Các intent `san-pham`, `xem-du-an`, `tu-van-vay` chỉ bổ sung khi có CTA/use case thật.
 
-## P1 — Lead conversion
-
 ### BL-LEAD-011 — CTA strategy
 
-**Status: NEXT**
+**Status: DONE — 2026-09-08**
 
-Rà soát hành trình visitor từ search/content -> CTA -> LeadCapture và ưu tiên CTA có ý định rõ, giá trị cao.
+Đã hoàn thiện CTA architecture cho project hero theo hướng reusable:
 
-Các CTA ưu tiên:
+- giữ `Xem giá bán`;
+- thêm `Đăng ký xem dự án`;
+- giữ `Zalo tư vấn`;
+- `ProjectHero` nhận `priceUrl`, `visitUrl`, `zaloUrl` qua props;
+- Zalo URL được đưa ra `contactLinks` trong config, không còn hard-code trong reusable component;
+- `priceUrl` được tạo động theo `projectSlug`;
+- `Đăng ký xem dự án` cuộn xuống LeadCapture Tổng quan qua anchor, không tạo thêm form trong Hero;
+- intent Tổng quan vẫn giữ `quan-tam-du-an` để không phá mapping đã freeze ở BL-LEAD-010.
 
-- Nhận bảng giá & giỏ hàng mới nhất
-- Nhận chính sách thanh toán
-- Nhận mặt bằng
-- Đăng ký xem dự án
+Validation:
 
-Việc đầu tiên: rà soát CTA hiện tại trên project route/ProjectHero và thiết kế `Đăng ký xem dự án` với `intent = xem-du-an` mà không hard-code dữ liệu dự án vào reusable core.
+- `npm run build`: PASS;
+- Hero hiển thị đủ 3 CTA: PASS;
+- `Đăng ký xem dự án` -> LeadCapture Tổng quan: PASS;
+- `Xem giá bán` -> trang giá bán: PASS;
+- `Zalo tư vấn`: PASS.
 
-Giữ form tối giản: phone required, name optional.
+Commit: `12bf3e0` — `BL-LEAD-011: refine reusable project CTA strategy`.
+
+Ghi chú kiến trúc còn tồn tại: project hero image vẫn đang hard-code đường dẫn Phú Gia Bảo Lộc trong project route; đây là technical debt cũ, không mở rộng scope trong BL-LEAD-011.
+
+## P1 — Lead conversion
 
 ### BL-LEAD-002 — Error handling hardening
 
+**Status: NEXT**
+
 Sau khi intent mapping/CTA strategy ổn định: invalid phone -> 400; DB unavailable -> user-friendly error; chống double submit; loading state; mobile UX.
+
+Ưu tiên kiểm tra hiện trạng trước khi sửa: API status code, client loading/disable behavior, error copy và khả năng submit lặp.
 
 ### BL-LEAD-003 — Anti-spam foundation
 
@@ -210,6 +224,6 @@ Hiện npm báo 11 vulnerabilities (2 moderate, 9 high). Review từng dependenc
 
 ## NEXT
 
-**BL-LEAD-011 — CTA strategy.**
+**BL-LEAD-002 — Error handling hardening.**
 
-Rà soát CTA hiện tại trên project route/ProjectHero; sau đó thiết kế `Đăng ký xem dự án` (`xem-du-an`) theo kiến trúc reusable, giữ form tối giản và không thêm form tràn lan.
+Đọc hiện trạng `src/pages/api/leads.ts` và `src/components/LeadCapture.astro` trước khi sửa; ưu tiên hardening nhỏ, không tăng friction và không phá DEV static / Cloudflare production architecture.
