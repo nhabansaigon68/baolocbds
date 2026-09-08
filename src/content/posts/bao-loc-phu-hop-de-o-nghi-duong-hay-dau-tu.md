@@ -8,7 +8,7 @@ category: "thi-truong"
 contentType: "analysis"
 searchIntent: "bao-loc-phu-hop-de-o-nghi-duong-hay-dau-tu"
 image:
-  url: "/images/posts/bao-loc-khong-gian-song-nghi-duong.jpg"
+  url: "/images/posts/bao-loc-khong-gian-song-nghi-duong.webp"
   alt: "Không gian xanh gợi ý trải nghiệm sống và nghỉ dưỡng tại Bảo Lộc"
 readingTime: 6
 ---
