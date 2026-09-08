@@ -57,6 +57,16 @@ const allPosts = await getCollection("posts");
     </p>
   </header>
 
+  <figure class="article-cover">
+    <img
+      src={post.data.image.url}
+      alt={post.data.image.alt}
+      width="1200"
+      height="675"
+      loading="eager"
+    />
+  </figure>
+
   <div class="article-divider"></div>
 
   <article class="article-body">
@@ -111,6 +121,20 @@ const allPosts = await getCollection("posts");
     color: #626761;
     font-size: 20px;
     line-height: 1.65;
+  }
+
+  .article-cover {
+    margin: 38px 0 0;
+    overflow: hidden;
+    border-radius: 18px;
+  }
+
+  .article-cover img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 560px;
+    object-fit: cover;
   }
 
   .article-divider {
@@ -191,6 +215,16 @@ const allPosts = await getCollection("posts");
       margin-top: 18px;
       font-size: 18px;
       line-height: 1.6;
+    }
+
+    .article-cover {
+      margin-top: 28px;
+      border-radius: 14px;
+    }
+
+    .article-cover img {
+      max-height: none;
+      object-fit: contain;
     }
 
     .article-divider {
