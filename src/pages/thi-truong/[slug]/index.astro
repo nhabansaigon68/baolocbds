@@ -174,12 +174,25 @@ const allPosts = await getCollection("posts");
   .article-body :global(ul),
   .article-body :global(ol) {
     margin: 0 0 26px;
-    padding-left: 24px;
+    padding-left: 26px;
+  }
+
+  .article-body :global(ul) {
+    list-style-type: disc;
+  }
+
+  .article-body :global(ol) {
+    list-style-type: decimal;
   }
 
   .article-body :global(li) {
     margin: 8px 0;
     padding-left: 4px;
+  }
+
+  .article-body :global(li::marker) {
+    color: #173c2c;
+    font-weight: 700;
   }
 
   .article-body :global(strong) {
