@@ -190,6 +190,18 @@ const {
         const result = await response.json();
 
         if (!response.ok || !result.ok) {
+          if (result.error === "INVALID_PHONE") {
+            phoneInput.setAttribute("aria-invalid", "true");
+
+            if (errorEl) {
+              errorEl.textContent =
+                "Kiểm tra lại số điện thoại giúp mình.";
+            }
+
+            phoneInput.focus();
+            return;
+          }
+
           throw new Error(result.error || "SAVE_FAILED");
         }
 
