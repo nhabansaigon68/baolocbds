@@ -92,15 +92,36 @@ Commit: `12bf3e0` — `BL-LEAD-011: refine reusable project CTA strategy`.
 
 Ghi chú kiến trúc còn tồn tại: project hero image vẫn đang hard-code đường dẫn Phú Gia Bảo Lộc trong project route; đây là technical debt cũ, không mở rộng scope trong BL-LEAD-011.
 
-## P1 — Lead conversion
-
 ### BL-LEAD-002 — Error handling hardening
 
-**Status: NEXT**
+**Status: DONE — 2026-09-08**
 
-Sau khi intent mapping/CTA strategy ổn định: invalid phone -> 400; DB unavailable -> user-friendly error; chống double submit; loading state; mobile UX.
+Đã harden Lead Capture theo hướng nhỏ, không tăng friction và không phá DEV static / Cloudflare production architecture:
 
-Ưu tiên kiểm tra hiện trạng trước khi sửa: API status code, client loading/disable behavior, error copy và khả năng submit lặp.
+- client và server cùng validate phone; invalid phone trả `400 INVALID_PHONE`;
+- client xử lý explicit `INVALID_PHONE`, focus lại input và hiển thị copy thân thiện;
+- submit button disable trong lúc gửi để tránh submit lặp và hiển thị `Đang gửi...`;
+- sau submit luôn khôi phục đúng label CTA gốc thay vì hard-code `Gửi cho tôi`;
+- response API không phải JSON được fallback an toàn, không làm vỡ form;
+- request JSON lỗi trả `400 INVALID_REQUEST`;
+- exception bất ngờ phía server/network trả `500 SERVER_ERROR` thay vì bị gán nhầm lỗi client;
+- lỗi lưu/Supabase tiếp tục hiển thị user-friendly error ở UI;
+- mobile form đã có responsive 1 cột, input/button tối thiểu 48px.
+
+Validation:
+
+- `npm run build`: PASS sau từng patch;
+- invalid phone smoke-test: PASS;
+- success flow giữ nguyên copy thành công và label CTA: PASS.
+
+Commits:
+
+- `14b0b2a` — `BL-LEAD-002: preserve lead CTA button label`;
+- `4136a05` — `BL-LEAD-002: handle invalid phone responses`;
+- `c6447b2` — `BL-LEAD-002: handle invalid API responses safely`;
+- `e966d45` — `BL-LEAD-002: separate client and server API errors`.
+
+## P1 — Lead conversion
 
 ### BL-LEAD-003 — Anti-spam foundation
 
@@ -168,11 +189,37 @@ Tạo topical graph: Homepage <-> Project <-> project subpages <-> market articl
 
 Project đã lấy động. Tiếp tục bổ sung summary, CTA, location/status, project hub link và mobile conversion.
 
-## P2 — Content Engine
+## P1 — Content Engine
 
 ### BL-CONTENT-050 — Posts collection
 
-Collection `posts` hiện trống. Tạo content thật thay dummy Test posts; xử lý build message ở `/tai-chinh/[slug]` và `/thi-truong/[slug]`.
+**Status: NEXT**
+
+Collection `posts` hiện trống. Thiết lập content engine thật thay dummy/Test posts và xử lý build message ở `/tai-chinh/[slug]` và `/thi-truong/[slug]`.
+
+Mục tiêu không phải viết hàng loạt bài mỏng, mà tạo lớp editorial/search-intent có cấu trúc, tái sử dụng cho nhiều dự án.
+
+Schema cần hướng tới các metadata tối thiểu như: `title`, `description`, `publishedAt`, `updatedAt`, `cover`, `category`, và khả năng liên kết bài với project bằng dữ liệu động thay vì hard-code.
+
+### BL-CONTENT-053 — Project Editorial / Experience Cluster
+
+Sau khi Posts collection foundation ổn định, mở cluster bài viết cho Phú Gia Bảo Lộc theo 4 nhóm:
+
+1. Experience / review thực địa;
+2. câu hỏi và search intent;
+3. góc nhìn ra quyết định, phù hợp/không phù hợp;
+4. market context kết nối dự án với Bảo Lộc.
+
+Nguyên tắc:
+
+- không copy sales post thành bài SEO;
+- không giả trải nghiệm;
+- cảm nhận phải phân biệt với fact;
+- fact pháp lý, giá, chính sách phải có nguồn và ngày cập nhật khi cần;
+- ưu tiên ảnh/ghi nhận thực tế, nội dung gốc và internal linking về project hub;
+- mỗi bài phải có search intent hoặc vai trò topical authority rõ ràng.
+
+Bài seed đầu tiên dự kiến: `Trải nghiệm Phú Gia Bảo Lộc: những điều đáng chú ý khi đến dự án` — chỉ publish khi có đủ tư liệu/ghi nhận phù hợp.
 
 ### BL-CONTENT-051 — Thị trường Bảo Lộc
 
@@ -221,9 +268,10 @@ Hiện npm báo 11 vulnerabilities (2 moderate, 9 high). Review từng dependenc
 - Không hard-code Phú Gia Bảo Lộc vào reusable core.
 - Không copy nguyên sales copy ERA.
 - Không publish pháp lý/chính sách chưa kiểm chứng.
+- Không tạo hàng loạt bài SEO mỏng chỉ để tăng số URL.
 
 ## NEXT
 
-**BL-LEAD-002 — Error handling hardening.**
+**BL-CONTENT-050 — Posts collection foundation.**
 
-Đọc hiện trạng `src/pages/api/leads.ts` và `src/components/LeadCapture.astro` trước khi sửa; ưu tiên hardening nhỏ, không tăng friction và không phá DEV static / Cloudflare production architecture.
+Đọc hiện trạng content collections, routes `/thi-truong` và `/tai-chinh`, cùng schema hiện có trước khi sửa. Thiết kế Posts collection thành content engine tái sử dụng, hỗ trợ editorial/search-intent và liên kết project bằng dữ liệu động; không hard-code Phú Gia Bảo Lộc vào core.
