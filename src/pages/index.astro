@@ -8,13 +8,18 @@ import { getCollection } from "astro:content";
 const posts = await getCollection("posts");
 
 posts.sort((a, b) => {
-  const dateA = new Date(a.data.pubDate).getTime();
-  const dateB = new Date(b.data.pubDate).getTime();
+  const dateA = a.data.publishedAt
+    ? a.data.publishedAt.getTime()
+    : a.data.pubDate.getTime();
+
+  const dateB = b.data.publishedAt
+    ? b.data.publishedAt.getTime()
+    : b.data.pubDate.getTime();
 
   return dateB - dateA;
 });
 
-posts.splice(2);
+posts.splice(4);
 const featuredProjects = (await getCollection("projects"))
   .filter((project) => project.id.endsWith("/tong-quan"));
 

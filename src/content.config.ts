@@ -17,6 +17,7 @@ const postsCollection = defineCollection({
     title: z.string(),
    
     pubDate: z.date(),
+    publishedAt: z.coerce.date().optional(),
     updatedAt: z.date().optional(),
     description: z.string(),
 
