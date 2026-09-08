@@ -76,6 +76,38 @@ const breadcrumbSchema = {
   "@type": "BreadcrumbList",
   itemListElement: breadcrumbItems,
 };
+
+const leadCaptureByPage: Record<
+  string,
+  {
+    title: string;
+    intent: string;
+    buttonLabel: string;
+  }
+> = {
+  "tong-quan": {
+    title: "Nhận thông tin mới nhất về dự án",
+    intent: "quan-tam-du-an",
+    buttonLabel: "Nhận thông tin",
+  },
+  "gia-ban": {
+    title: "Nhận bảng giá & giỏ hàng mới nhất",
+    intent: "bang-gia",
+    buttonLabel: "Nhận bảng giá",
+  },
+  "chinh-sach": {
+    title: "Nhận chính sách thanh toán mới nhất",
+    intent: "chinh-sach",
+    buttonLabel: "Nhận chính sách",
+  },
+  "mat-bang": {
+    title: "Nhận mặt bằng dự án",
+    intent: "mat-bang",
+    buttonLabel: "Nhận mặt bằng",
+  },
+};
+
+const leadCapture = leadCaptureByPage[pageSlug];
 ---
 
 <Layout
@@ -105,11 +137,11 @@ const breadcrumbSchema = {
       <Content />
     </article>
 
-    {pageSlug === "gia-ban" && (
+    {leadCapture && (
       <LeadCapture
-        title="Nhận bảng giá & giỏ hàng mới nhất"
-        intent="bang-gia"
-        buttonLabel="Nhận bảng giá"
+        title={leadCapture.title}
+        intent={leadCapture.intent}
+        buttonLabel={leadCapture.buttonLabel}
       />
     )}
 
