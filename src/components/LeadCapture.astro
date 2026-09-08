@@ -166,6 +166,9 @@ const {
       const submitButton =
         form.querySelector<HTMLButtonElement>(".lead-submit");
 
+      const originalButtonLabel =
+        submitButton?.textContent?.trim() || "Gửi cho tôi";
+
       if (submitButton) {
         submitButton.disabled = true;
         submitButton.textContent = "Đang gửi...";
@@ -210,7 +213,7 @@ const {
       } finally {
         if (submitButton) {
           submitButton.disabled = false;
-          submitButton.textContent = "Gửi cho tôi";
+          submitButton.textContent = originalButtonLabel;
         }
       }
     });
