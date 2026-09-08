@@ -187,7 +187,19 @@ const {
           body: JSON.stringify(lead),
         });
 
-        const result = await response.json();
+        let result: {
+          ok?: boolean;
+          error?: string;
+        } = {};
+
+        try {
+          result = await response.json();
+        } catch {
+          result = {
+            ok: false,
+            error: "INVALID_RESPONSE",
+          };
+        }
 
         if (!response.ok || !result.ok) {
           if (result.error === "INVALID_PHONE") {
