@@ -1,7 +1,7 @@
 # BAO LOC BDS — PROJECT STATE
 
 > Domain: `baolocbds.com`  
-> Cập nhật: 2026-09-07
+> Cập nhật: 2026-09-08
 
 ## 1. Mục tiêu
 
@@ -78,6 +78,16 @@ ProjectHero: ảnh cover, project title, description, location/status, CTA, resp
 ProjectNav: tự sinh từ collection, sort bằng `order`, active state, mobile horizontal scroll, không hard-code danh sách tab.
 
 Desktop/mobile smoke test: PASS.
+
+Ngày 2026-09-08 đã nâng cấp CTA architecture:
+
+- `Xem giá bán`;
+- `Đăng ký xem dự án`;
+- `Zalo tư vấn`.
+
+`ProjectHero` nhận `priceUrl`, `visitUrl`, `zaloUrl` qua props; Zalo URL được đưa vào config thay vì hard-code trong reusable component; `priceUrl` tạo động theo `projectSlug`; CTA xem dự án anchor-scroll về LeadCapture Tổng quan.
+
+Commit: `12bf3e0` — `BL-LEAD-011: refine reusable project CTA strategy`.
 
 ## 6. Homepage
 
@@ -162,6 +172,17 @@ Không hỏi dropdown nhu cầu ở V1. `intent` suy ra từ CTA/page. `sourceUr
 
 Phone là string, normalize về E.164 `+84...`. Validation tồn tại ở client, server và DB.
 
+CTA intent mapping hiện tại:
+
+- Tổng quan -> `quan-tam-du-an`;
+- Giá bán -> `bang-gia`;
+- Chính sách -> `chinh-sach`;
+- Mặt bằng -> `mat-bang`.
+
+Mapping được khai báo reusable theo `pageSlug`, không nhét form vào mọi project page.
+
+Commit: `d009b58` — `BL-LEAD-010: add reusable CTA intent mapping`.
+
 ## 11. Supabase lead storage
 
 Đã tạo `public.leads` với fields:
@@ -213,11 +234,40 @@ Không dùng Supabase Realtime trong Lead V1. Quyết định này giảm depend
 
 Package `ws` từng được cài chỉ để diagnostic, sau đó đã gỡ. `@supabase/supabase-js` cũng đã được gỡ vì Lead API cuối cùng dùng native REST `fetch()`.
 
+Ngày 2026-09-08, `BL-LEAD-002` hardening hoàn tất:
+
+- invalid JSON request -> `400 INVALID_REQUEST`;
+- invalid phone -> `400 INVALID_PHONE`;
+- Supabase non-ok -> `500 SAVE_FAILED`;
+- unexpected server/network exception -> `500 SERVER_ERROR`;
+- không còn gán nhầm exception phía server thành `400 INVALID_REQUEST`.
+
+Commit API hardening: `e966d45` — `BL-LEAD-002: separate client and server API errors`.
+
 ## 15. LeadCapture component
 
-Đã tạo `src/components/LeadCapture.astro` với phone required, name optional, intent prop, source URL, client validation, loading state, POST `/api/leads`, success/error feedback và responsive UI.
+`src/components/LeadCapture.astro` hiện có:
 
-Hiện mount trên `/du-an/phu-gia-bao-loc/gia-ban/` với `intent = bang-gia`.
+- phone required;
+- name optional;
+- intent prop;
+- source URL tự ghi;
+- client validation;
+- submit loading state;
+- disable button trong lúc gửi để tránh submit lặp;
+- success/error feedback;
+- responsive mobile 1 cột;
+- xử lý explicit `INVALID_PHONE` từ API;
+- fallback an toàn khi API response không phải JSON;
+- khôi phục đúng CTA label gốc sau submit.
+
+UI error chung giữ copy thân thiện: `Chưa gửi được. Bạn thử lại hoặc liên hệ Zalo giúp mình.`
+
+Commits hardening client:
+
+- `14b0b2a` — preserve lead CTA button label;
+- `4136a05` — handle invalid phone responses;
+- `c6447b2` — handle invalid API responses safely.
 
 ## 16. Lead Capture V1 — PRODUCTION E2E PASS
 
@@ -243,37 +293,58 @@ Cloudflare deployment checkpoint:
 
 **BL-LEAD-001 = DONE. Lead Capture V1 foundation = DONE.**
 
-## 17. Known issues
+## 17. Lead conversion checkpoint 2026-09-08
+
+DONE:
+
+- `BL-LEAD-010` — CTA intent mapping;
+- `BL-LEAD-011` — reusable project CTA strategy;
+- `BL-LEAD-002` — error handling hardening.
+
+Validation gần nhất:
+
+- `npm run build`: PASS;
+- 4 intent smoke tests: PASS;
+- Hero 3 CTA smoke tests: PASS;
+- invalid phone smoke test: PASS;
+- success flow giữ đúng success copy và CTA label: PASS;
+- local branch sạch và đồng bộ sau commit `e966d45`.
+
+Anti-spam và lead operations chưa làm; chỉ mở khi có nhu cầu thực tế để tránh overbuild.
+
+## 18. Content Engine direction
+
+Ngày 2026-09-08 chốt hướng mở rộng nội dung: BAO LOC BDS không chỉ có project fact pages mà cần thêm lớp editorial/search-intent để xây topical authority và đa dạng organic entry points.
+
+Content engine dự kiến gồm:
+
+1. Project facts — nguồn thông tin chuẩn, fact-first;
+2. Experience / Review — trải nghiệm, ghi nhận thực địa, ưu/nhược điểm, không giả trải nghiệm;
+3. Question / Search intent — trả lời truy vấn dài và câu hỏi thực tế;
+4. Market context — kết nối dự án với thị trường, hạ tầng và câu chuyện Bảo Lộc.
+
+Nguyên tắc:
+
+- không copy Facebook/sales copy thành bài SEO;
+- không tạo hàng loạt bài mỏng chỉ để tăng URL;
+- cảm nhận phải phân biệt với fact;
+- fact pháp lý/giá/chính sách phải kiểm chứng và có ngày cập nhật khi cần;
+- ưu tiên ảnh/ghi nhận thực tế và nội dung gốc;
+- internal linking phải đưa authority về project hub và liên kết sang market/finance content;
+- core posts phải tái sử dụng cho nhiều dự án, không hard-code Phú Gia Bảo Lộc.
+
+Bài gợi ý `Trải nghiệm Phú Gia Bảo Lộc – nơi ấn tượng ngay từ lần đầu đặt chân đến` được xem là seed idea, không phải nội dung để copy trực tiếp.
+
+## 19. Known issues / technical debt
 
 - `posts` collection hiện trống; build có message ở dynamic routes Thị trường/Tài chính nhưng không fail.
+- project hero image trong project route vẫn hard-code đường dẫn Phú Gia Bảo Lộc; technical debt cũ, chưa xử lý.
 - npm hiện báo 11 vulnerabilities (2 moderate, 9 high). Không dùng `npm audit fix --force`; cần review có kiểm soát sau.
 
-## 18. Checkpoint 2026-09-07
+## 20. Next exact action
 
-- Project UI: PASS
-- Project responsive: PASS
-- Project content routes: PASS
-- Homepage project discovery: PASS
-- SEO foundation: PASS
-- Sitemap: PASS
-- Robots: PASS
-- Structured data: PASS
-- Google Search Console domain verification: PASS
-- Google Search Console sitemap submission: PASS
-- Supabase database: PASS
-- Direct DB insert: PASS
-- Lead component check: PASS
-- Lead API check: PASS
-- Production E2E Lead test: PASS
-- Lead Capture V1 foundation: DONE
+**BL-CONTENT-050 — Posts collection foundation.**
 
-## 19. Next exact action
+Đọc hiện trạng content collections, routes `/thi-truong` và `/tai-chinh`, schema hiện có trước khi sửa.
 
-Mở rộng LeadCapture có chọn lọc theo search/visitor intent, không nhét form vào mọi page.
-
-Ưu tiên tiếp theo:
-
-1. `BL-LEAD-010` — CTA intent mapping.
-2. Gắn LeadCapture vào Tổng quan / Chính sách / Mặt bằng với intent riêng.
-3. Giữ form tối giản: phone required, name optional.
-4. Sau đó mới làm anti-spam, attribution và lead operations khi có nhu cầu thực tế.
+Mục tiêu: thiết kế Posts collection thành content engine tái sử dụng, hỗ trợ editorial/search-intent, metadata SEO và liên kết project bằng dữ liệu động; không hard-code Phú Gia Bảo Lộc vào core.
