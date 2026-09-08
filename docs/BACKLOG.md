@@ -1,7 +1,7 @@
 # BAO LOC BDS — BACKLOG
 
 > Domain: `baolocbds.com`  
-> Cập nhật: 2026-09-07
+> Cập nhật: 2026-09-08
 
 Priority: P0 = blocking, P1 = quan trọng, P2 = tăng trưởng, P3 = tối ưu sau.
 
@@ -36,27 +36,42 @@ Lead Capture V1 foundation chính thức DONE.
 
 Theo dõi tiếp theo là indexing/coverage/query khi Search Console bắt đầu có dữ liệu; đây là monitoring, không còn blocking setup.
 
-## P1 — Lead conversion
+## DONE — Lead conversion foundation
 
 ### BL-LEAD-010 — CTA intent mapping
 
-**Status: NEXT**
+**Status: DONE — 2026-09-08**
 
-Gắn LeadCapture có chọn lọc:
+Đã chuyển project route từ điều kiện riêng cho `gia-ban` sang reusable `leadCaptureByPage` mapping theo `pageSlug`.
+
+Mapping đang hoạt động:
 
 - tổng quan -> `quan-tam-du-an`;
-- giá bán -> `bang-gia` — DONE;
+- giá bán -> `bang-gia`;
 - chính sách -> `chinh-sach`;
-- mặt bằng -> `mat-bang`;
-- sản phẩm -> `san-pham`;
-- xem dự án -> `xem-du-an`;
-- tư vấn vay -> `tu-van-vay`.
+- mặt bằng -> `mat-bang`.
 
-Không bắt khách chọn dropdown nếu intent có thể suy ra từ CTA. Không nhét form vào mọi page.
+Mỗi mapping có title và button label riêng. Không bắt khách chọn dropdown nếu intent có thể suy ra từ CTA/page.
 
-Ưu tiên triển khai tiếp: Tổng quan -> Chính sách -> Mặt bằng.
+Validation:
+
+- `npm run build`: PASS;
+- DEV static smoke-test Tổng quan: PASS;
+- DEV static smoke-test Giá bán: PASS;
+- DEV static smoke-test Chính sách: PASS;
+- DEV static smoke-test Mặt bằng: PASS.
+
+Commit: `d009b58` — `BL-LEAD-010: add reusable CTA intent mapping`.
+
+Không nhét form vào mọi page. Các intent `san-pham`, `xem-du-an`, `tu-van-vay` chỉ bổ sung khi có CTA/use case thật.
+
+## P1 — Lead conversion
 
 ### BL-LEAD-011 — CTA strategy
+
+**Status: NEXT**
+
+Rà soát hành trình visitor từ search/content -> CTA -> LeadCapture và ưu tiên CTA có ý định rõ, giá trị cao.
 
 Các CTA ưu tiên:
 
@@ -65,11 +80,13 @@ Các CTA ưu tiên:
 - Nhận mặt bằng
 - Đăng ký xem dự án
 
+Việc đầu tiên: rà soát CTA hiện tại trên project route/ProjectHero và thiết kế `Đăng ký xem dự án` với `intent = xem-du-an` mà không hard-code dữ liệu dự án vào reusable core.
+
 Giữ form tối giản: phone required, name optional.
 
 ### BL-LEAD-002 — Error handling hardening
 
-Sau khi intent mapping ổn định: invalid phone -> 400; DB unavailable -> user-friendly error; chống double submit; loading state; mobile UX.
+Sau khi intent mapping/CTA strategy ổn định: invalid phone -> 400; DB unavailable -> user-friendly error; chống double submit; loading state; mobile UX.
 
 ### BL-LEAD-003 — Anti-spam foundation
 
@@ -184,7 +201,7 @@ Hiện npm báo 11 vulnerabilities (2 moderate, 9 high). Review từng dependenc
 - Không ép workerd chạy trên Big Sur.
 - Không chuyển DEV static sang server chỉ để smoke-test.
 - Không commit `.env`.
-- Không expose `SUPABASE_SECRET_KEY`.
+- Không expose server secrets client-side.
 - Không cho browser dùng server secret để ghi Supabase.
 - Không chạy `npm audit fix --force`.
 - Không hard-code Phú Gia Bảo Lộc vào reusable core.
@@ -193,6 +210,6 @@ Hiện npm báo 11 vulnerabilities (2 moderate, 9 high). Review từng dependenc
 
 ## NEXT
 
-**BL-LEAD-010 — CTA intent mapping.**
+**BL-LEAD-011 — CTA strategy.**
 
-Mở rộng LeadCapture có chọn lọc sang Tổng quan / Chính sách / Mặt bằng, mỗi vị trí mang intent riêng và vẫn giữ form tối giản.
+Rà soát CTA hiện tại trên project route/ProjectHero; sau đó thiết kế `Đăng ký xem dự án` (`xem-du-an`) theo kiến trúc reusable, giữ form tối giản và không thêm form tràn lan.
