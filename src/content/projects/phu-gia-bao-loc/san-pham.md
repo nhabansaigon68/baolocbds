@@ -38,6 +38,6 @@ Dòng sản phẩm kết hợp nhà ở với khoảng không gian sân vườn 
 
 ## Thông tin chi tiết
 
-Diện tích từng lô, vị trí, kích thước, hướng, thiết kế, giá bán và tình trạng sản phẩm cần được đối chiếu theo **mặt bằng và bảng hàng tại từng thời điểm**.
+Diện tích từng lô, vị trí, kích thước và hướng cần được đối chiếu theo [mặt bằng dự án](/du-an/phu-gia-bao-loc/mat-bang/); giá và tình trạng sản phẩm cần kiểm tra theo [bảng giá tại từng thời điểm](/du-an/phu-gia-bao-loc/gia-ban/).
 
-BAO LOC BDS sẽ cập nhật chi tiết khi có dữ liệu phù hợp để công bố.
+BAO LOC BDS sẽ cập nhật chi tiết khi có dữ liệu phù hợp để công bố; điều kiện mua và phương thức thanh toán được tách riêng tại trang [chính sách Phú Gia Bảo Lộc](/du-an/phu-gia-bao-loc/chinh-sach/).

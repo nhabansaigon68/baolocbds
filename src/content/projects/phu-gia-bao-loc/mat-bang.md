@@ -55,7 +55,7 @@ Ngoài mặt bằng tổng thể, cần đối chiếu riêng:
 - Kích thước.
 - Hướng.
 - Đường tiếp cận và lộ giới.
-- Quy hoạch hiện hành.
+- [Quy hoạch hiện hành](/du-an/phu-gia-bao-loc/quy-hoach/).
 - Hồ sơ pháp lý tương ứng.
 
-Thông tin từng sản phẩm sẽ được đối chiếu theo bảng hàng và hồ sơ tại thời điểm tư vấn.
+Thông tin từng sản phẩm sẽ được đối chiếu theo [các dòng sản phẩm](/du-an/phu-gia-bao-loc/san-pham/), [bảng giá Phú Gia Bảo Lộc](/du-an/phu-gia-bao-loc/gia-ban/) và hồ sơ tại thời điểm tư vấn.

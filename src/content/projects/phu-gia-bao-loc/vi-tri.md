@@ -45,4 +45,4 @@ Khi các đoạn cao tốc trong trục kết nối được hoàn thành và đ
 
 Điểm đáng chú ý của Phú Gia Bảo Lộc là vị trí trên trục giao thông hiện hữu của Bảo Lộc, đồng thời nằm trong khu vực hưởng lợi về khả năng kết nối khi hệ thống cao tốc liên vùng từng bước được hoàn thiện.
 
-BAO LOC BDS sẽ tiếp tục cập nhật thông tin về hạ tầng và kết nối thực tế của dự án khi có dữ liệu mới.
+BAO LOC BDS sẽ tiếp tục cập nhật thông tin về hạ tầng và kết nối thực tế của dự án khi có dữ liệu mới. Người đọc có thể đối chiếu thêm [tổng quan Phú Gia Bảo Lộc](/du-an/phu-gia-bao-loc/), [quy hoạch dự án](/du-an/phu-gia-bao-loc/quy-hoach/) và [cập nhật tiến độ](/du-an/phu-gia-bao-loc/tien-do/).

@@ -16,7 +16,7 @@ Trong bảng giá mở bán đợt 1, đơn giá đất hiện ghi nhận khoả
 
 **24,5 – 28,6 triệu đồng/m², đã bao gồm VAT.**
 
-Mức giá thực tế của từng sản phẩm phụ thuộc vào vị trí, hướng, diện tích và loại hình.
+Mức giá thực tế của từng sản phẩm phụ thuộc vào vị trí, hướng, diện tích và [loại hình sản phẩm](/du-an/phu-gia-bao-loc/san-pham/).
 
 ## Một số sản phẩm tham khảo
 
@@ -57,8 +57,8 @@ Giá bán có thể thay đổi theo:
 - Vị trí và hướng sản phẩm.
 - Diện tích.
 - Tình trạng đã xây dựng hay chưa.
-- Chính sách bán hàng tại từng thời điểm.
+- [Chính sách bán hàng tại từng thời điểm](/du-an/phu-gia-bao-loc/chinh-sach/).
 
 Đối với những sản phẩm chưa có giá trong bảng, cần kiểm tra lại với đơn vị phân phối hoặc bộ phận quản lý giỏ hàng trước khi tư vấn.
 
-BAO LOC BDS sẽ cập nhật bảng giá và tình trạng sản phẩm khi nhận được dữ liệu mới.
+BAO LOC BDS sẽ cập nhật bảng giá và tình trạng sản phẩm khi nhận được dữ liệu mới. Các câu hỏi ngắn về giá và điều kiện mua cũng được tổng hợp tại [FAQ dự án](/du-an/phu-gia-bao-loc/faq/).

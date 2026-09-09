@@ -12,7 +12,7 @@ BAO LOC BDS cập nhật tiến độ Phú Gia Bảo Lộc dựa trên hồ sơ 
 
 ## Hạ tầng kỹ thuật
 
-Một mốc quan trọng của dự án là việc hoàn thành hệ thống hạ tầng kỹ thuật.
+Một mốc quan trọng của dự án là việc hoàn thành hệ thống hạ tầng kỹ thuật; các văn bản liên quan được tổng hợp tại trang [pháp lý Phú Gia Bảo Lộc](/du-an/phu-gia-bao-loc/phap-ly/).
 
 Ngày **12/01/2023**, Sở Xây dựng tỉnh Lâm Đồng ban hành **Thông báo số 82/TB-SXD** về kết quả kiểm tra công tác nghiệm thu hoàn thành xây dựng hệ thống hạ tầng kỹ thuật.
 
@@ -48,6 +48,6 @@ Hệ thống hạ tầng được thiết kế gồm:
 
 ## Cập nhật thực tế
 
-Tiến độ xây dựng cảnh quan, tiện ích, công trình nhà ở và các hạng mục khác sẽ được BAO LOC BDS tiếp tục cập nhật bằng hình ảnh và ghi nhận thực tế tại dự án.
+Tiến độ xây dựng cảnh quan, tiện ích, công trình nhà ở và các hạng mục khác sẽ được BAO LOC BDS tiếp tục cập nhật bằng [hình ảnh dự án](/du-an/phu-gia-bao-loc/thu-vien-anh/) và ghi nhận thực tế tại dự án.
 
 Thông tin tiến độ có thể thay đổi theo thời điểm. Khi cần kiểm tra một sản phẩm cụ thể, nên đối chiếu tình trạng thực tế và hồ sơ của sản phẩm tại thời điểm giao dịch.

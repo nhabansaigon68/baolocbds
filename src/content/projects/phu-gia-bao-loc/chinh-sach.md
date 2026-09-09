@@ -71,7 +71,7 @@ Chính sách bán hàng và phương thức thanh toán có thể được đi�
 
 Trước khi đặt cọc, khách hàng nên kiểm tra lại:
 
-- Giá bán của đúng sản phẩm.
+- [Giá bán của đúng sản phẩm](/du-an/phu-gia-bao-loc/gia-ban/).
 - Chính sách và chiết khấu đang áp dụng.
 - Tiến độ thanh toán.
 - Điều kiện hỗ trợ vay ngân hàng.
@@ -79,4 +79,4 @@ Trước khi đặt cọc, khách hàng nên kiểm tra lại:
 - Nội dung hợp đồng chuyển nhượng.
 - Các khoản thuế, phí và nghĩa vụ tài chính liên quan.
 
-BAO LOC BDS sẽ cập nhật chính sách khi nhận được tài liệu mới từ đơn vị dự án.
+BAO LOC BDS sẽ cập nhật chính sách khi nhận được tài liệu mới từ đơn vị dự án. Cơ cấu sản phẩm được trình bày riêng tại trang [Sản phẩm](/du-an/phu-gia-bao-loc/san-pham/), còn các câu hỏi thường gặp được tổng hợp tại [FAQ Phú Gia Bảo Lộc](/du-an/phu-gia-bao-loc/faq/).

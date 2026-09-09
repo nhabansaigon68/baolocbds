@@ -8,7 +8,7 @@ order: 11
 
 # Hình ảnh Phú Gia Bảo Lộc
 
-Một số hình ảnh về cảnh quan, tiện ích và không gian tại Phú Gia Bảo Lộc.
+Một số hình ảnh về cảnh quan, [tiện ích Phú Gia Bảo Lộc](/du-an/phu-gia-bao-loc/tien-ich/) và không gian tại dự án.
 
 ## Tổng quan
 
@@ -36,4 +36,4 @@ Một số hình ảnh về cảnh quan, tiện ích và không gian tại Phú 
 
 ---
 
-Hình ảnh dự án sẽ tiếp tục được BAO LOC BDS cập nhật theo tiến độ và ghi nhận thực tế.
+Hình ảnh dự án sẽ tiếp tục được BAO LOC BDS cập nhật theo [tiến độ Phú Gia Bảo Lộc](/du-an/phu-gia-bao-loc/tien-do/) và ghi nhận thực tế. Xem [tổng quan dự án](/du-an/phu-gia-bao-loc/) để đặt các hình ảnh này trong bối cảnh chung.

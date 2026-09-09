@@ -58,4 +58,4 @@ Danh mục trên được tổng hợp từ thông tin giới thiệu của dự
 
 Tên gọi, thiết kế, vị trí, quy mô và tiến độ triển khai từng hạng mục có thể được cập nhật theo hồ sơ và kế hoạch triển khai thực tế.
 
-BAO LOC BDS sẽ tiếp tục cập nhật hình ảnh, mặt bằng và tình trạng thực tế của các tiện ích khi có thêm thông tin.
+BAO LOC BDS sẽ tiếp tục cập nhật [hình ảnh dự án](/du-an/phu-gia-bao-loc/thu-vien-anh/) và đối chiếu [tình trạng triển khai](/du-an/phu-gia-bao-loc/tien-do/) của các tiện ích khi có thêm thông tin.

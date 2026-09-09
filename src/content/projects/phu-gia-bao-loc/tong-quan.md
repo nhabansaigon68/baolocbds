@@ -14,7 +14,7 @@ order: 1
 
 Phú Gia Bảo Lộc là dự án bất động sản tọa lạc tại **765 Trần Phú, Phường 3, Bảo Lộc, Lâm Đồng**, trên trục Quốc lộ 20.
 
-Dự án có quy mô khoảng **9,1 ha**, với các dòng sản phẩm gồm biệt thự, nhà liên kế phố và nhà liên kế vườn.
+Dự án có quy mô khoảng **9,1 ha**, với [các dòng sản phẩm](/du-an/phu-gia-bao-loc/san-pham/) gồm biệt thự, nhà liên kế phố và nhà liên kế vườn.
 
 ## Thông tin tổng quan
 
@@ -55,11 +55,11 @@ Một số tiện ích được giới thiệu gồm:
 - Golf mini.
 - Khách sạn nội khu.
 
-Thông tin chi tiết được cập nhật tại trang **Tiện ích**.
+Thông tin chi tiết được cập nhật tại trang [Tiện ích Phú Gia Bảo Lộc](/du-an/phu-gia-bao-loc/tien-ich/).
 
 ## Vị trí
 
-Dự án nằm trên đường Trần Phú – Quốc lộ 20, một trong những trục giao thông chính đi qua Bảo Lộc.
+Dự án nằm trên đường Trần Phú – Quốc lộ 20, một trong những trục giao thông chính đi qua Bảo Lộc. Xem thêm [vị trí Phú Gia Bảo Lộc](/du-an/phu-gia-bao-loc/vi-tri/) và các kết nối được ghi nhận.
 
 [Vị trí Phú Gia Bảo Lộc trên Google Maps](https://maps.app.goo.gl/oCjxZgb7mDfiAk9X7?g_st=ac)
 
@@ -68,9 +68,9 @@ Dự án nằm trên đường Trần Phú – Quốc lộ 20, một trong nhữ
 BAO LOC BDS đang tiếp tục tổng hợp và đối chiếu các thông tin về:
 
 - Quy hoạch và mặt bằng.
-- Hồ sơ pháp lý.
+- [Hồ sơ pháp lý](/du-an/phu-gia-bao-loc/phap-ly/).
 - Tiến độ dự án.
-- Giá bán.
+- [Giá bán Phú Gia Bảo Lộc](/du-an/phu-gia-bao-loc/gia-ban/).
 - Chính sách bán hàng.
 
 Các nội dung trên sẽ được cập nhật tại từng chuyên mục của dự án khi có thông tin phù hợp để công bố.

@@ -37,7 +37,7 @@ Theo thông tin dự án:
 - **Quy mô:** khoảng 9,1 ha.
 - Dự án được tổ chức thành các khu chức năng, hệ thống đường nội bộ, hạ tầng kỹ thuật và các lô sản phẩm.
 
-Thông tin chi tiết từng lô sẽ được cập nhật tại trang **Mặt bằng** và **Sản phẩm**.
+Thông tin chi tiết từng lô được đối chiếu thêm tại [mặt bằng dự án](/du-an/phu-gia-bao-loc/mat-bang/) và [các dòng sản phẩm](/du-an/phu-gia-bao-loc/san-pham/).
 
 ## Lưu ý khi xem quy hoạch
 
@@ -48,6 +48,6 @@ Khi lựa chọn một sản phẩm cụ thể, người mua nên kiểm tra:
 - Chức năng sử dụng đất.
 - Lộ giới và đường tiếp cận.
 - Các thay đổi quy hoạch mới nhất nếu có.
-- Sự phù hợp giữa bản đồ quy hoạch và hồ sơ pháp lý của lô.
+- Sự phù hợp giữa bản đồ quy hoạch và [hồ sơ pháp lý của dự án](/du-an/phu-gia-bao-loc/phap-ly/).
 
 BAO LOC BDS sẽ tiếp tục cập nhật bản đồ và thông tin chi tiết sau khi đối chiếu đầy đủ các hồ sơ quy hoạch hiện có.

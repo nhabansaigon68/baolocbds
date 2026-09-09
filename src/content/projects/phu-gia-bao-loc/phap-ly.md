@@ -12,7 +12,7 @@ BAO LOC BDS tổng hợp thông tin pháp lý Phú Gia Bảo Lộc dựa trên c
 
 ## Quy hoạch chi tiết 1/500
 
-Dự án có hồ sơ **quy hoạch chi tiết xây dựng tỷ lệ 1/500** được phê duyệt trong năm 2022.
+Dự án có hồ sơ [**quy hoạch chi tiết xây dựng tỷ lệ 1/500**](/du-an/phu-gia-bao-loc/quy-hoach/) được phê duyệt trong năm 2022.
 
 Bộ hồ sơ hiện có gồm:
 
@@ -72,9 +72,9 @@ Trước khi thực hiện giao dịch đối với một sản phẩm cụ th�
 - Giấy chứng nhận của đúng lô/sản phẩm.
 - Mục đích sử dụng đất.
 - Diện tích và ranh giới.
-- Quy hoạch hiện hành.
+- [Quy hoạch hiện hành](/du-an/phu-gia-bao-loc/quy-hoach/).
 - Tình trạng thế chấp hoặc hạn chế giao dịch nếu có.
 - Điều kiện chuyển nhượng tại thời điểm giao dịch.
 - Hợp đồng và các nghĩa vụ tài chính liên quan.
 
-BAO LOC BDS tiếp tục cập nhật trang này khi các hồ sơ được đối chiếu đầy đủ hơn.
+BAO LOC BDS tiếp tục cập nhật trang này khi các hồ sơ được đối chiếu đầy đủ hơn. Khi xem một sản phẩm cụ thể, nên đối chiếu thêm [mặt bằng dự án](/du-an/phu-gia-bao-loc/mat-bang/) và phần [câu hỏi thường gặp](/du-an/phu-gia-bao-loc/faq/).

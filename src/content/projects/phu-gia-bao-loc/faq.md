@@ -10,7 +10,7 @@ order: 12
 
 ## Phú Gia Bảo Lộc nằm ở đâu?
 
-Dự án tọa lạc tại **765 Trần Phú, Phường 3, Bảo Lộc, Lâm Đồng**, trên trục Quốc lộ 20.
+Dự án tọa lạc tại **765 Trần Phú, Phường 3, Bảo Lộc, Lâm Đồng**, trên trục Quốc lộ 20. Xem chi tiết tại [vị trí Phú Gia Bảo Lộc](/du-an/phu-gia-bao-loc/vi-tri/).
 
 ## Quy mô dự án bao nhiêu?
 
@@ -22,7 +22,7 @@ Chủ đầu tư và pháp nhân dự án là **Công ty Cổ phần Đầu tư 
 
 ## Dự án có những loại sản phẩm nào?
 
-Các nhóm sản phẩm hiện được giới thiệu gồm:
+Chi tiết được tổng hợp tại trang [Sản phẩm Phú Gia Bảo Lộc](/du-an/phu-gia-bao-loc/san-pham/). Các nhóm sản phẩm hiện được giới thiệu gồm:
 
 - Biệt thự.
 - Nhà liên kế phố.
@@ -38,23 +38,23 @@ Theo dữ liệu hiện có:
 
 ## Dự án có quy hoạch 1/500 không?
 
-Bộ hồ sơ hiện có bao gồm quyết định phê duyệt quy hoạch chi tiết xây dựng tỷ lệ **1/500**, bản đồ quy hoạch phân lô và các hồ sơ điều chỉnh liên quan.
+Bộ hồ sơ hiện có bao gồm quyết định phê duyệt quy hoạch chi tiết xây dựng tỷ lệ **1/500**, bản đồ quy hoạch phân lô và các hồ sơ điều chỉnh liên quan. Xem phần [quy hoạch dự án](/du-an/phu-gia-bao-loc/quy-hoach/) để đối chiếu chi tiết.
 
 ## Hạ tầng dự án đã nghiệm thu chưa?
 
-Sở Xây dựng tỉnh Lâm Đồng đã ban hành **Thông báo số 82/TB-SXD ngày 12/01/2023** về kết quả kiểm tra công tác nghiệm thu hoàn thành hệ thống hạ tầng kỹ thuật.
+Sở Xây dựng tỉnh Lâm Đồng đã ban hành **Thông báo số 82/TB-SXD ngày 12/01/2023** về kết quả kiểm tra công tác nghiệm thu hoàn thành hệ thống hạ tầng kỹ thuật. Nội dung liên quan được tổng hợp tại [trang pháp lý](/du-an/phu-gia-bao-loc/phap-ly/) và [cập nhật tiến độ](/du-an/phu-gia-bao-loc/tien-do/).
 
 ## Giá bán Phú Gia Bảo Lộc hiện khoảng bao nhiêu?
 
 Theo bảng giá chính thức mở bán đợt 1 ngày 29/08/2026, đơn giá đất được ghi nhận khoảng **24,5 – 28,6 triệu đồng/m²**, đã bao gồm VAT.
 
-Giá thực tế phụ thuộc vào block, vị trí, hướng, diện tích và tình trạng từng sản phẩm.
+Giá thực tế phụ thuộc vào block, vị trí, hướng, diện tích và tình trạng từng sản phẩm. Xem [bảng giá Phú Gia Bảo Lộc](/du-an/phu-gia-bao-loc/gia-ban/) để kiểm tra dữ liệu theo thời điểm.
 
 ## Có hỗ trợ vay ngân hàng không?
 
 Theo phương thức thanh toán tháng 08/2026, dự án có phương án vay ngân hàng với chính sách hỗ trợ lãi suất và ân hạn gốc.
 
-Điều kiện vay thực tế phụ thuộc hồ sơ khách hàng, ngân hàng và chính sách tại thời điểm áp dụng.
+Điều kiện vay thực tế phụ thuộc hồ sơ khách hàng, ngân hàng và [chính sách tại thời điểm áp dụng](/du-an/phu-gia-bao-loc/chinh-sach/).
 
 ## Có chiết khấu khi thanh toán nhanh không?
 
