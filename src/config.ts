@@ -74,7 +74,7 @@ export const homePageContent: HomePageContent = {
     description:
       "Chia sẻ góc nhìn thực tế về bất động sản Bảo Lộc, thị trường, dự án và những câu chuyện phía sau mỗi quyết định xuống tiền",
 
-    image: identity.logo,
+    image: "/images/social/baolocbds-homepage-og.jpg",
   },
 
   role: "Bất động sản • Bảo Lộc • Góc nhìn thực tế",
