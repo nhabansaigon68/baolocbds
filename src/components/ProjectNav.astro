@@ -12,7 +12,10 @@ const pages = (await getCollection("projects"))
   .sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999));
 ---
 
-<div class="project-nav-shell">
+<div
+  id="project-nav"
+  class="project-nav-shell"
+>
   <nav
     class="project-nav"
     aria-label="Điều hướng dự án"
@@ -44,6 +47,27 @@ const pages = (await getCollection("projects"))
     }
   </nav>
 </div>
+
+<script>
+  const PROJECT_PREFIX = "/du-an/";
+
+  document.addEventListener("astro:after-swap", () => {
+    const path = window.location.pathname;
+
+    if (!path.startsWith(PROJECT_PREFIX)) return;
+
+    const nav = document.getElementById("project-nav");
+    if (!nav) return;
+
+    const top = nav.getBoundingClientRect().top + window.scrollY;
+
+    window.scrollTo({
+      top,
+      left: 0,
+      behavior: "instant",
+    });
+  });
+</script>
 
 <style>
   .project-nav-shell {
