@@ -16,6 +16,21 @@ Phú Gia Bảo Lộc là dự án bất động sản tọa lạc tại **765 Tr
 
 Dự án có quy mô khoảng **9,1 ha**, với [các dòng sản phẩm](/du-an/phu-gia-bao-loc/san-pham/) gồm biệt thự, nhà liên kế phố và nhà liên kế vườn.
 
+## Video giới thiệu Phú Gia Bảo Lộc
+
+Một số hình ảnh thực tế tại Phú Gia Bảo Lộc giúp người xem hình dung rõ hơn về không gian và cảnh quan của dự án.
+
+<div style="position:relative;width:100%;aspect-ratio:16/9;margin:24px 0 36px;overflow:hidden;border-radius:16px;">
+  <iframe
+    src="https://www.youtube.com/embed/5-D7CinAL-c"
+    title="Phú Gia Bảo Lộc | Toàn cảnh dự án và không gian thực tế"
+    loading="lazy"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    allowfullscreen
+    style="position:absolute;inset:0;width:100%;height:100%;border:0;"
+  ></iframe>
+</div>
+
 ## Thông tin tổng quan
 
 | Thông tin | Chi tiết |
