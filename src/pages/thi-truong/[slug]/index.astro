@@ -1,6 +1,7 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
 import PostRecommendations from "../../../components/PostRecommendations.astro";
+import LeadCapture from "../../../components/LeadCapture.astro";
 import { getCollection, render } from "astro:content";
 
 export const prerender = true;
@@ -22,6 +23,19 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content } = await render(post);
 const allPosts = await getCollection("posts");
+
+const projectSlug = post.data.projectSlug;
+
+const project = projectSlug
+  ? (await getCollection("projects")).find(
+      (item) => item.id === `${projectSlug}/tong-quan`,
+    )
+  : undefined;
+
+const projectName =
+  project?.data.projectName ??
+  project?.data.title ??
+  projectSlug;
 ---
 
 <Layout
@@ -72,6 +86,15 @@ const allPosts = await getCollection("posts");
   <article class="article-body">
     <Content />
   </article>
+
+  {projectSlug && projectName && (
+    <LeadCapture
+      title={`Nhận thông tin ${projectName}`}
+      description="Để lại số điện thoại, BAO LOC BDS sẽ gửi thông tin mới nhất về dự án và hỗ trợ bạn khi cần xem thực tế."
+      intent={`project:${projectSlug}`}
+      buttonLabel="Nhận thông tin dự án"
+    />
+  )}
 
   <PostRecommendations
     currentPost={post}

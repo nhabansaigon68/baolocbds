@@ -1,12 +1,14 @@
 ---
 interface Props {
   title?: string;
+  description?: string;
   intent: string;
   buttonLabel?: string;
 }
 
 const {
   title = "Nhận thông tin mới nhất",
+  description = "Để lại số điện thoại, mình sẽ gửi thông tin phù hợp với nội dung bạn đang quan tâm.",
   intent,
   buttonLabel = "Gửi cho tôi",
 } = Astro.props;
@@ -20,7 +22,7 @@ const {
       <h2>{title}</h2>
 
       <p>
-        Để lại số điện thoại, mình sẽ gửi thông tin phù hợp với nội dung bạn đang quan tâm.
+        {description}
       </p>
     </div>
 
