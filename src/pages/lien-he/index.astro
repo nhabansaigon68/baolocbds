@@ -1,0 +1,254 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import LeadCapture from "../../components/LeadCapture.astro";
+import { identity, contactLinks } from "../../config";
+
+const phoneDisplay = "096 502 7930";
+---
+
+<Layout
+  seo={{
+    title: "Liên Hệ Phú Gia Bảo Lộc | Tư Vấn Bất Động Sản Bảo Lộc",
+    description:
+      "Liên hệ Phú Gia Bảo Lộc để trao đổi về nhà đất, dự án và bất động sản Bảo Lộc. Gọi điện, nhắn Zalo hoặc để lại số điện thoại để được liên hệ.",
+    image: "/images/social/baolocbds-homepage-og.jpg",
+  }}
+>
+  <div class="contact-page">
+    <header class="contact-hero">
+      <p class="eyebrow">PHÚ GIA BẢO LỘC</p>
+
+      <h1>Cần thông tin bất động sản Bảo Lộc? Cứ nhắn Phước</h1>
+
+      <p class="intro">
+        Bạn đang tìm đất, nhà, dự án tại Bảo Lộc — hoặc chỉ muốn hỏi nhanh
+        một thông tin trước khi quyết định? Phước có thể hỗ trợ kiểm tra
+        thông tin, chia sẻ góc nhìn thị trường và trao đổi trực tiếp theo
+        nhu cầu thực tế của bạn.
+      </p>
+    </header>
+
+    <section class="contact-options" aria-label="Thông tin liên hệ">
+      <a
+        class="contact-card"
+        href={contactLinks.phone}
+      >
+        <span class="contact-label">Gọi trực tiếp</span>
+
+        <strong>{phoneDisplay}</strong>
+
+        <span class="contact-note">
+          Phù hợp khi bạn muốn trao đổi nhanh, hỏi thông tin cụ thể hoặc cần phản hồi sớm.
+        </span>
+      </a>
+
+      <a
+        class="contact-card"
+        href={contactLinks.zalo}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <span class="contact-label">Nhắn Zalo</span>
+
+        <strong>Nhắn Phước trên Zalo</strong>
+
+        <span class="contact-note">
+          Gửi vị trí, hình ảnh, link bất động sản hoặc nhu cầu đang tìm để Phước xem trước.
+        </span>
+      </a>
+
+      <a
+        class="contact-card"
+        href={contactLinks.email}
+      >
+        <span class="contact-label">Email</span>
+
+        <strong>{identity.email}</strong>
+
+        <span class="contact-note">
+          Phù hợp khi cần gửi thông tin dài, hồ sơ hoặc nội dung chi tiết.
+        </span>
+      </a>
+    </section>
+
+    <section class="contact-context">
+      <h2>Phước có thể hỗ trợ gì?</h2>
+
+      <div class="contact-context-grid">
+        <div>
+          <strong>Tìm bất động sản phù hợp</strong>
+
+          <p>
+            Trao đổi nhu cầu mua đất, nhà hoặc sản phẩm bất động sản tại Bảo Lộc.
+          </p>
+        </div>
+
+        <div>
+          <strong>Tìm hiểu dự án</strong>
+
+          <p>
+            Hỏi thêm về vị trí, sản phẩm, mức giá và thông tin thị trường liên quan.
+          </p>
+        </div>
+
+        <div>
+          <strong>Kiểm tra một bất động sản bạn đang quan tâm</strong>
+
+          <p>
+            Gửi thông tin hoặc link, Phước sẽ xem và trao đổi lại những điểm đáng chú ý.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <LeadCapture
+      intent="contact-general"
+      title="Chưa tiện gọi?"
+      description="Để lại số điện thoại và vài thông tin cơ bản. Phước sẽ liên hệ lại khi nhận được yêu cầu."
+      buttonLabel="Gửi nhu cầu"
+    />
+  </div>
+</Layout>
+
+<style>
+  .contact-page {
+    width: min(100% - 40px, 1040px);
+    margin: 0 auto;
+    padding-top: 64px;
+  }
+
+  .contact-hero {
+    max-width: 760px;
+  }
+
+  .eyebrow {
+    margin: 0 0 12px;
+    color: #657067;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+  }
+
+  .contact-hero h1 {
+    margin: 0;
+    font-size: clamp(36px, 6vw, 58px);
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+  }
+
+  .intro {
+    max-width: 720px;
+    margin: 24px 0 0;
+    color: #62625c;
+    font-size: 18px;
+    line-height: 1.75;
+  }
+
+  .contact-options {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: 52px;
+  }
+
+  .contact-card {
+    display: flex;
+    min-height: 180px;
+    flex-direction: column;
+    padding: 24px;
+    border: 1px solid rgba(23, 23, 23, 0.1);
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.55);
+    text-decoration: none;
+    transition:
+      transform 180ms ease,
+      border-color 180ms ease,
+      background-color 180ms ease;
+  }
+
+  .contact-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(23, 23, 23, 0.2);
+    background: rgba(255, 255, 255, 0.8);
+  }
+
+  .contact-label {
+    color: #77776f;
+    font-size: 12px;
+    font-weight: 650;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .contact-card strong {
+    margin-top: 18px;
+    color: #171717;
+    font-size: 18px;
+    line-height: 1.4;
+  }
+
+  .contact-note {
+    margin-top: auto;
+    padding-top: 20px;
+    color: #73736c;
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  .contact-context {
+    margin-top: 80px;
+  }
+
+  .contact-context h2 {
+    margin: 0;
+    font-size: 28px;
+    letter-spacing: -0.025em;
+  }
+
+  .contact-context-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 32px;
+    margin-top: 28px;
+  }
+
+  .contact-context-grid strong {
+    font-size: 15px;
+  }
+
+  .contact-context-grid p {
+    margin: 9px 0 0;
+    color: #707069;
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  @media (max-width: 767px) {
+    .contact-page {
+      width: min(100% - 32px, 1040px);
+      padding-top: 42px;
+    }
+
+    .intro {
+      font-size: 16px;
+    }
+
+    .contact-options {
+      grid-template-columns: 1fr;
+      margin-top: 38px;
+    }
+
+    .contact-card {
+      min-height: 155px;
+    }
+
+    .contact-context {
+      margin-top: 58px;
+    }
+
+    .contact-context-grid {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+  }
+</style>
