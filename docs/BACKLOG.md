@@ -1,23 +1,82 @@
 # BAO LOC BDS — BACKLOG
 
 > Domain: `baolocbds.com`  
-> Cập nhật: 2026-09-09
+> Cập nhật: 2026-09-16
 
 Priority: P0 = blocking, P1 = quan trọng, P2 = tăng trưởng, P3 = tối ưu sau.
 
 ## OPERATING MODE — RUN & MEASURE
 
-Từ 2026-09-09, BAO LOC BDS chuyển từ giai đoạn build nền tảng sang **RUN & MEASURE**.
+BAO LOC BDS đang ở **RUN & MEASURE**.
 
-Chuỗi vận hành hiện tại:
+Chuỗi vận hành:
 
-`BUILD nền tảng ✓ -> SEO foundation ✓ -> Content foundation ✓ -> Internal graph ✓ -> Google crawl/index -> MEASURE -> cải tiến theo dữ liệu`
+`BUILD nền tảng ✓ -> SEO foundation ✓ -> Content foundation ✓ -> Internal graph ✓ -> Lead availability hardening ✓ -> Google crawl/index -> MEASURE -> cải tiến theo dữ liệu`
 
 Nguyên tắc ưu tiên:
 - không mở thêm task code chỉ vì backlog còn mục chưa DONE;
 - chỉ quay lại code khi có lỗi production, dữ liệu Search Console/traffic chỉ ra vấn đề kỹ thuật cụ thể, hoặc lead thật cho thấy workflow hiện tại chưa đủ;
 - content, media, fact update và theo dõi Search Console tiếp tục như công việc vận hành;
-- ưu tiên nguồn lực phát triển cho dự án nhaHub.
+- ưu tiên nguồn lực phát triển cho **nhaHub**.
+
+## DONE — OPS-001 Supabase Lead Availability
+
+### OPS-001A — Supabase Health Endpoint
+
+**Status: DONE — 2026-09-16**
+
+Production endpoint:
+- `GET https://baolocbds.com/api/health/supabase`
+- READ-only Supabase REST: `public.leads`, `select=id&limit=1`;
+- không INSERT/fake lead;
+- không expose server secret;
+- success: HTTP 200 + `{"ok":true,"service":"supabase"}`;
+- `Cache-Control: no-store`.
+
+Commit:
+- `0c381e1` — `OPS-001A: add Supabase health endpoint`.
+
+### OPS-001A.1 — Cloudflare Runtime Bindings Fix
+
+**Status: DONE — 2026-09-16**
+
+Production health test ban đầu trả `500 SERVER_CONFIG_ERROR` dù Worker có secret. Root cause: API routes đọc Cloudflare runtime bindings bằng `import.meta.env`.
+
+Đã sửa:
+- Cloudflare Worker có đủ `SUPABASE_SECRET_KEY` và `SUPABASE_URL`;
+- `SUPABASE_URL`: `https://nqzwffxjldnzplccqgba.supabase.co`;
+- `src/env.d.ts` khai báo `Runtime<Env>` cho `App.Locals`;
+- `/api/health/supabase` dùng `locals.runtime.env`;
+- `/api/leads` cũng chuyển sang `locals.runtime.env`;
+- không đổi LeadCapture, Supabase schema, payload, validation hoặc API contract.
+
+Verification:
+- `npm run build` PASS;
+- production health endpoint trả HTTP/2 200;
+- Cloudflare -> runtime bindings -> Supabase REST -> leads READ PASS.
+
+Lưu ý vận hành: GitHub push hiện kích hoạt Cloudflare auto-deployment; không deploy thủ công nếu không có lý do/approval.
+
+### OPS-001B — Scheduled Supabase Health Check
+
+**Status: DONE — 2026-09-16**
+
+External scheduler: cron-job.org.
+
+Configuration:
+- job: `baolocbds Supabase Health`;
+- GET `https://baolocbds.com/api/health/supabase`;
+- timezone `Asia/Ho_Chi_Minh`;
+- cron `0 8,14,20 * * *`;
+- executions: 08:00 / 14:00 / 20:00 mỗi ngày;
+- enabled;
+- manual Test Run PASS: `200 OK`, ~1.32s.
+
+Operational follow-up only:
+- kiểm tra History sau scheduled execution đầu tiên (14:00 ngày 2026-09-16) để xác nhận automatic run PASS;
+- sau đó chỉ theo dõi khi có failure notification/history bất thường.
+
+Không mở thêm coding task cho OPS-001 nếu không có failure thực tế.
 
 ## DONE — Lead Capture Production Verification
 
@@ -25,11 +84,13 @@ Nguyên tắc ưu tiên:
 
 **Status: DONE — 2026-09-07**
 
-Production flow đã PASS:
+Production flow:
 
 `baolocbds.com -> LeadCapture -> POST /api/leads -> Cloudflare Worker -> Supabase public.leads`
 
 Verified: form submit, success UI, Supabase record, intent mapping, source URL, E.164 phone normalization và Cloudflare deployment đều PASS.
+
+Ngày 2026-09-16 runtime binding access của `/api/leads` được harden trong OPS-001A.1.
 
 ### BL-LEAD-002 — Error handling hardening
 
@@ -47,7 +108,7 @@ DONE:
 
 **Status: DONE — 2026-09-08**
 
-Mapping hiện tại:
+Mapping:
 - tổng quan -> `quan-tam-du-an`;
 - giá bán -> `bang-gia`;
 - chính sách -> `chinh-sach`;
@@ -57,12 +118,28 @@ Mapping hiện tại:
 
 **Status: DONE — 2026-09-08**
 
-Project hero hiện có:
+Project hero:
 - `Xem giá bán`;
 - `Đăng ký xem dự án`;
 - `Zalo tư vấn`.
 
 CTA architecture reusable, không hard-code link Zalo trong component.
+
+## P1 — Lead conversion — CONDITION BASED
+
+### BL-LEAD-003 — Anti-spam foundation
+
+Chỉ làm khi có spam thật. Ưu tiên honeypot/rate limiting/duplicate suppression; chỉ thêm Turnstile khi cần.
+
+### BL-LEAD-012 — Lead operations
+
+Chỉ kích hoạt khi có lead thật. Workflow tối thiểu: lead mới, đã liên hệ, ghi chú, trạng thái. Không xây CRM lớn trong V1.
+
+### BL-LEAD-013 — Contact page
+
+**Status: CONDITION BASED / NOT ACTIVE**
+
+`src/pages/lien-he/index.astro` hiện chưa có nội dung hoàn chỉnh. LeadCapture foundation đã tồn tại. Chỉ mở task riêng khi P muốn hoàn thiện `/lien-he/`; không bundle vào OPS-001.
 
 ## DONE — SEO Foundation Registration
 
@@ -73,10 +150,9 @@ CTA architecture reusable, không hard-code link Zalo trong component.
 - Domain Property verified bằng DNS TXT.
 - Sitemap `https://baolocbds.com/sitemap-index.xml` submit thành công.
 - Search Console ngày 2026-09-08 đã khám phá 22 URL, 0 indexed.
-- Homepage đang ở trạng thái `Đã phát hiện thấy – hiện chưa được lập chỉ mục`, chưa có lần crawl gần nhất.
-- Đã gửi yêu cầu lập chỉ mục thủ công cho homepage ngày 2026-09-08.
+- Homepage ở trạng thái sớm `Đã phát hiện thấy – hiện chưa được lập chỉ mục` và đã gửi yêu cầu lập chỉ mục thủ công ngày 2026-09-08.
 
-Không xem đây là lỗi kỹ thuật ở thời điểm hiện tại; tiếp tục theo dõi crawl/indexing trước khi can thiệp kỹ thuật.
+Không xem đây là lỗi kỹ thuật ở thời điểm hiện tại; tiếp tục theo dõi crawl/indexing trước khi can thiệp.
 
 ### BL-SEO-034 — Phú Gia Bảo Lộc Contextual Internal Linking
 
@@ -84,7 +160,7 @@ Không xem đây là lỗi kỹ thuật ở thời điểm hiện tại; tiếp 
 
 Commit: `00782b3` — `SEO-034: strengthen Phu Gia contextual internal linking`
 
-Đã hoàn tất contextual internal linking trong 12 Markdown pages của cluster Phú Gia Bảo Lộc:
+Đã hoàn tất contextual internal linking trong 12 Markdown pages:
 - 12 files changed;
 - 31 insertions, 31 deletions;
 - hub <-> deep pages có quan hệ semantic tự nhiên;
@@ -93,22 +169,7 @@ Commit: `00782b3` — `SEO-034: strengthen Phu Gia contextual internal linking`
 - không đổi facts;
 - không thay ProjectNav/core.
 
-TEST PASS:
-- `npm run build` (bao gồm `astro check && astro build`);
-- toàn bộ contextual internal links resolve;
-- đủ 12 URL trong sitemap;
-- ProjectNav còn hoạt động trên 12 trang;
-- Lead Capture/contact signals không bị ảnh hưởng.
-
-## P1 — Lead conversion — CONDITION BASED
-
-### BL-LEAD-003 — Anti-spam foundation
-
-Chỉ làm khi có spam thật. Ưu tiên honeypot/rate limiting/duplicate suppression; chỉ thêm Turnstile khi cần.
-
-### BL-LEAD-012 — Lead operations
-
-Chỉ kích hoạt khi có lead thật. Thiết kế workflow tối thiểu: lead mới, đã liên hệ, ghi chú, trạng thái. Không xây CRM lớn trong V1.
+TEST PASS: build, links, sitemap, ProjectNav và Lead Capture/contact signals.
 
 ## P1 — Phú Gia Bảo Lộc Content Upgrade — MAINTENANCE
 
@@ -146,7 +207,7 @@ Xây FAQ từ câu hỏi thật: vị trí, chủ đầu tư, pháp lý, sổ, g
 
 ### BL-SEO-031 — Validate structured data
 
-Kiểm tra production WebSite, Organization, BreadcrumbList; URL tuyệt đối và JSON-LD hợp lệ. Không blocking giai đoạn RUN & MEASURE nếu production không phát sinh lỗi.
+Kiểm tra production WebSite, Organization, BreadcrumbList; URL tuyệt đối và JSON-LD hợp lệ. Không blocking RUN & MEASURE nếu production không phát sinh lỗi.
 
 ### BL-SEO-032 — Project metadata
 
@@ -156,7 +217,7 @@ Mỗi subpage cần title/description/canonical/OG image/heading intent riêng. 
 
 **Status: FOUNDATION DONE — 2026-09-08**
 
-Đã thiết lập pipeline ảnh content chuẩn:
+Pipeline:
 - WebP thật;
 - cạnh dài tối đa 1200px;
 - quality 78;
@@ -164,20 +225,16 @@ Mỗi subpage cần title/description/canonical/OG image/heading intent riêng. 
 - filename semantic;
 - alt text thật;
 - không giữ source/original trong `public`;
-- script: `scripts/optimize-content-image.sh`;
-- Pillow chạy trong `.venv-image`, không đụng Python system.
-
-Tiếp tục áp dụng cho ảnh content mới khi vận hành.
+- `scripts/optimize-content-image.sh`;
+- Pillow trong `.venv-image`.
 
 ## P1 — Homepage — MEASURE FIRST
 
 ### BL-HOME-040 — Featured Project Card Content
 
-Project đã lấy động từ collection.
+Project lấy động từ collection. Homepage hiện hiển thị 4 bài mới nhất và sort theo `publishedAt`, fallback `pubDate`.
 
-Ngày 2026-09-08 homepage đã nâng section bài viết từ 2 lên **4 bài mới nhất** và sort theo `publishedAt` chính xác, fallback về `pubDate`.
-
-Còn lại: refine CTA, location/status, mobile conversion **chỉ khi dữ liệu thực tế cho thấy cần**.
+Refine CTA/location/status/mobile conversion chỉ khi dữ liệu thực tế cho thấy cần.
 
 ## P1 — Content Engine — FOUNDATION DONE / OPERATIONS CONTINUE
 
@@ -185,17 +242,7 @@ Còn lại: refine CTA, location/status, mobile conversion **chỉ khi dữ li�
 
 **Status: DONE — 2026-09-08**
 
-Đã hoàn thiện foundation:
-- `src/content/posts/` hoạt động;
-- schema mở rộng `updatedAt`, `publishedAt`, `contentType`, `searchIntent`, `projectSlug`;
-- article detail editorial layout;
-- cover image trong article;
-- bullet/ordered-list typography;
-- homepage routing đúng theo category;
-- `PostRecommendations.astro` cho Related + Latest;
-- related/latest smoke test với nhiều bài;
-- homepage tự lấy bài mới nhất;
-- build PASS.
+Đã có schema mở rộng, editorial detail layout, cover image, typography, routing, `PostRecommendations.astro`, Related + Latest, homepage latest ordering và build PASS.
 
 ### BL-CONTENT-053 — Project Editorial / Experience Cluster
 
@@ -204,28 +251,12 @@ Còn lại: refine CTA, location/status, mobile conversion **chỉ khi dữ li�
 Nguyên tắc:
 - không copy sales post;
 - không giả trải nghiệm;
-- fact và cảm nhận phải tách biệt;
+- fact và cảm nhận tách biệt;
 - pháp lý/giá/chính sách cần source + ngày cập nhật khi cần;
 - ưu tiên ảnh thực địa, media semantic và internal linking;
 - mỗi bài phải có search intent hoặc vai trò topical authority rõ.
 
-#### Published/committed seed articles
-
-1. `Bất động sản Bảo Lộc: 7 nhóm thông tin nên kiểm tra trước khi xuống tiền`
-2. `Đất Bảo Lộc: 5 lỗi thường gặp khi chỉ nhìn giá rẻ`
-3. `Mua đất Bảo Lộc nên kiểm tra pháp lý gì?`
-4. `Bảo Lộc phù hợp để ở, nghỉ dưỡng hay đầu tư?`
-5. `Phú Gia Bảo Lộc ở đâu? Cách nhìn vị trí đúng hơn quảng cáo`
-6. `Phú Gia Bảo Lộc phù hợp với ai?`
-7. `Những điều nên kiểm tra trước khi xem Phú Gia Bảo Lộc`
-
-Bài #7 đã có cover thực địa + ảnh sơ đồ sản phẩm chen trong body.
-
-#### Planned initial 10-post batch — không còn là NEXT code task
-
-8. `Trải nghiệm Phú Gia Bảo Lộc: những điều đáng chú ý khi đến dự án` — chỉ publish khi đủ tư liệu thực tế.
-9. `Cách đọc chính sách thanh toán dự án BĐS`
-10. `Hạ tầng Bảo Lộc: phân biệt cái đã có và cái còn là kỳ vọng`
+Seed articles đã publish/commit: 7 bài. Các bài tiếp theo chỉ publish khi đủ tư liệu và có search intent rõ.
 
 ### BL-CONTENT-051 — Thị trường Bảo Lộc
 
@@ -249,7 +280,7 @@ Khi có đủ traffic để đo, theo dõi click Zalo, phone, open lead form, su
 
 ### BL-ARCH-070 — Multi-project reusability
 
-Tiếp tục nguyên tắc không hard-code Phú Gia Bảo Lộc trong reusable core. Không refactor chỉ vì mục tiêu “đẹp code” nếu chưa có project thứ hai cần dùng.
+Tiếp tục nguyên tắc không hard-code Phú Gia Bảo Lộc trong reusable core. Không refactor chỉ vì “đẹp code” nếu chưa có project thứ hai cần dùng.
 
 ## P3 — Security / Hardening
 
@@ -259,16 +290,17 @@ Review least privilege, RLS và production secrets khi có lý do vận hành/se
 
 ### BL-SEC-081 — Dependency audit
 
-Hiện npm báo 11 vulnerabilities (2 moderate, 9 high). Review theo exploitability và compatibility. Không chạy `npm audit fix --force`.
+Hiện npm từng báo 11 vulnerabilities (2 moderate, 9 high). Review theo exploitability và compatibility. Không chạy `npm audit fix --force`.
 
 ## DO NOT DO
 
 - Không nâng Node tùy tiện.
-- Không nâng macOS chỉ để chạy Cloudflare local.
+- Không nâng macOS/Wrangler chỉ để xử lý warning hiện tại.
 - Không ép workerd chạy trên Big Sur.
 - Không chuyển DEV static sang server chỉ để smoke-test.
 - Không commit `.env` hoặc `.venv-image`.
 - Không expose server secrets client-side.
+- Không dùng fake lead/INSERT làm keep-alive Supabase.
 - Không chạy `npm audit fix --force`.
 - Không hard-code Phú Gia Bảo Lộc vào reusable core.
 - Không copy sales copy ERA.
@@ -282,9 +314,10 @@ Hiện npm báo 11 vulnerabilities (2 moderate, 9 high). Review theo exploitabil
 **RUN & MEASURE — không có active coding task.**
 
 Theo dõi:
-1. Google crawl/indexing và Search Console;
-2. production health;
-3. traffic/search queries khi bắt đầu có dữ liệu;
-4. lead thật và conversion signals.
+1. cron-job.org History sau scheduled execution đầu tiên 14:00 ngày 2026-09-16; sau đó chỉ theo dõi failure;
+2. Google crawl/indexing và Search Console;
+3. production health;
+4. traffic/search queries khi bắt đầu có dữ liệu;
+5. lead thật và conversion signals.
 
-Chỉ mở lại coding task khi một tín hiệu thực tế yêu cầu. Trọng tâm phát triển kỹ thuật chuyển sang **nhaHub**.
+Chỉ mở lại coding task khi tín hiệu thực tế yêu cầu. Trọng tâm phát triển kỹ thuật: **nhaHub**.
