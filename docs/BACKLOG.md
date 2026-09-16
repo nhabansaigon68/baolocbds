@@ -11,7 +11,7 @@ BAO LOC BDS đang ở **RUN & MEASURE**.
 
 Chuỗi vận hành:
 
-`BUILD nền tảng ✓ -> SEO foundation ✓ -> Content foundation ✓ -> Internal graph ✓ -> Lead availability hardening ✓ -> Google crawl/index -> MEASURE -> cải tiến theo dữ liệu`
+`BUILD nền tảng ✓ -> SEO foundation ✓ -> Content foundation ✓ -> Internal graph ✓ -> Lead availability hardening ✓ -> Contact/Lead notification ✓ -> Google crawl/index -> MEASURE -> cải tiến theo dữ liệu`
 
 Nguyên tắc ưu tiên:
 - không mở thêm task code chỉ vì backlog còn mục chưa DONE;
@@ -55,7 +55,7 @@ Verification:
 - production health endpoint trả HTTP/2 200;
 - Cloudflare -> runtime bindings -> Supabase REST -> leads READ PASS.
 
-Lưu ý vận hành: GitHub push hiện kích hoạt Cloudflare auto-deployment; không deploy thủ công nếu không có lý do/approval.
+Lưu ý vận hành: GitHub push có thể kích hoạt Cloudflare auto-deployment; manual deploy chỉ khi có lý do/approval rõ.
 
 ### OPS-001B — Scheduled Supabase Health Check
 
@@ -73,24 +73,30 @@ Configuration:
 - manual Test Run PASS: `200 OK`, ~1.32s.
 
 Operational follow-up only:
-- kiểm tra History sau scheduled execution đầu tiên (14:00 ngày 2026-09-16) để xác nhận automatic run PASS;
-- sau đó chỉ theo dõi khi có failure notification/history bất thường.
-
-Không mở thêm coding task cho OPS-001 nếu không có failure thực tế.
+- kiểm tra History nếu có failure notification/history bất thường;
+- không mở thêm coding task cho OPS-001 nếu không có failure thực tế.
 
 ## DONE — Lead Capture Production Verification
 
 ### BL-LEAD-001 — Production E2E Lead Smoke Test
 
-**Status: DONE — 2026-09-07**
+**Status: DONE — 2026-09-07; re-verified 2026-09-16**
 
-Production flow:
+Production flow hiện tại:
 
-`baolocbds.com -> LeadCapture -> POST /api/leads -> Cloudflare Worker -> Supabase public.leads`
+`baolocbds.com -> LeadCapture -> POST /api/leads -> Cloudflare Worker -> Supabase public.leads -> Resend email notification`
 
-Verified: form submit, success UI, Supabase record, intent mapping, source URL, E.164 phone normalization và Cloudflare deployment đều PASS.
+Verified:
+- form submit;
+- success UI;
+- Supabase record;
+- intent mapping;
+- source URL;
+- E.164 phone normalization;
+- Cloudflare deployment;
+- email notification delivery.
 
-Ngày 2026-09-16 runtime binding access của `/api/leads` được harden trong OPS-001A.1.
+Ngày 2026-09-16 runtime binding access của `/api/leads` được harden trong OPS-001A.1 và email notification được bổ sung trong OPS-002.
 
 ### BL-LEAD-002 — Error handling hardening
 
@@ -106,13 +112,14 @@ DONE:
 
 ### BL-LEAD-010 — CTA intent mapping
 
-**Status: DONE — 2026-09-08**
+**Status: DONE — 2026-09-08; extended 2026-09-16**
 
 Mapping:
 - tổng quan -> `quan-tam-du-an`;
 - giá bán -> `bang-gia`;
 - chính sách -> `chinh-sach`;
-- mặt bằng -> `mat-bang`.
+- mặt bằng -> `mat-bang`;
+- liên hệ -> `contact-general`.
 
 ### BL-LEAD-011 — CTA strategy
 
@@ -125,6 +132,61 @@ Project hero:
 
 CTA architecture reusable, không hard-code link Zalo trong component.
 
+### BL-LEAD-013 — Contact page
+
+**Status: DONE — 2026-09-16**
+
+Production route:
+- `https://baolocbds.com/lien-he/`
+
+DONE:
+- copy hướng conversion;
+- phone / Zalo / email CTA;
+- SEO metadata;
+- dùng chung `LeadCapture.astro`;
+- `intent=contact-general`;
+- responsive desktop/mobile;
+- build PASS;
+- production visual PASS;
+- production lead submit PASS;
+- email notification PASS.
+
+Commit:
+- `df707da` — `SEO-035: add contact page foundation`.
+
+## DONE — OPS-002 Lead Email Notification
+
+**Status: DONE — 2026-09-16**
+
+Mục tiêu: P nhận thông báo email ngay sau khi lead được lưu thành công vào Supabase.
+
+Architecture:
+
+`LeadCapture -> /api/leads -> Supabase save -> Resend API -> notification email`
+
+Implementation:
+- `src/services/lead-notification.ts`;
+- `/api/leads` gọi notification sau khi Supabase save thành công;
+- email lỗi không làm mất lead đã lưu;
+- notification gồm name, phone, intent, source URL;
+- không hard-code API key trong repo.
+
+Cloudflare Worker secrets:
+- `RESEND_API_KEY`;
+- `LEAD_NOTIFICATION_TO`;
+- `LEAD_NOTIFICATION_FROM`.
+
+Resend:
+- domain `baolocbds.com` đã cấu hình/verify;
+- sender dùng domain `baolocbds.com`;
+- secret/API key giữ ngoài source code.
+
+Production verification:
+- `/lien-he/` -> Supabase PASS -> email PASS;
+- `/du-an/phu-gia-bao-loc/` -> `intent=quan-tam-du-an` -> Supabase PASS -> email PASS.
+
+Không mở thêm Zalo/Telegram notification nếu email hiện tại đủ dùng.
+
 ## P1 — Lead conversion — CONDITION BASED
 
 ### BL-LEAD-003 — Anti-spam foundation
@@ -133,13 +195,7 @@ Chỉ làm khi có spam thật. Ưu tiên honeypot/rate limiting/duplicate suppr
 
 ### BL-LEAD-012 — Lead operations
 
-Chỉ kích hoạt khi có lead thật. Workflow tối thiểu: lead mới, đã liên hệ, ghi chú, trạng thái. Không xây CRM lớn trong V1.
-
-### BL-LEAD-013 — Contact page
-
-**Status: CONDITION BASED / NOT ACTIVE**
-
-`src/pages/lien-he/index.astro` hiện chưa có nội dung hoàn chỉnh. LeadCapture foundation đã tồn tại. Chỉ mở task riêng khi P muốn hoàn thiện `/lien-he/`; không bundle vào OPS-001.
+Chỉ kích hoạt khi có lead thật cần quản lý vòng đời. Workflow tối thiểu: lead mới, đã liên hệ, ghi chú, trạng thái. Không xây CRM lớn trong V1.
 
 ## DONE — SEO Foundation Registration
 
@@ -170,6 +226,12 @@ Commit: `00782b3` — `SEO-034: strengthen Phu Gia contextual internal linking`
 - không thay ProjectNav/core.
 
 TEST PASS: build, links, sitemap, ProjectNav và Lead Capture/contact signals.
+
+### SEO-035 — Contact Page Foundation
+
+**Status: DONE — 2026-09-16**
+
+Xem BL-LEAD-013 ở trên.
 
 ## P1 — Phú Gia Bảo Lộc Content Upgrade — MAINTENANCE
 
@@ -314,10 +376,11 @@ Hiện npm từng báo 11 vulnerabilities (2 moderate, 9 high). Review theo expl
 **RUN & MEASURE — không có active coding task.**
 
 Theo dõi:
-1. cron-job.org History sau scheduled execution đầu tiên 14:00 ngày 2026-09-16; sau đó chỉ theo dõi failure;
-2. Google crawl/indexing và Search Console;
-3. production health;
-4. traffic/search queries khi bắt đầu có dữ liệu;
-5. lead thật và conversion signals.
+1. Google crawl/indexing và Search Console;
+2. production health + cron-job.org History;
+3. traffic/search queries khi bắt đầu có dữ liệu;
+4. lead thật và conversion signals;
+5. email notification delivery nếu có lead thật;
+6. chỉ mở lead operations/anti-spam khi dữ liệu thực tế yêu cầu.
 
-Chỉ mở lại coding task khi tín hiệu thực tế yêu cầu. Trọng tâm phát triển kỹ thuật: **nhaHub**.
+Trọng tâm phát triển kỹ thuật: **nhaHub**.
