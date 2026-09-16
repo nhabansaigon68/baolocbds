@@ -1,4 +1,8 @@
 import type { APIRoute } from "astro";
+import {
+  notifyLeadByEmail,
+  type LeadNotificationEnv,
+} from "../../services/lead-notification";
 
 export const prerender = false;
 
@@ -158,6 +162,24 @@ export const POST: APIRoute = async ({ request, locals }) => {
             "Content-Type": "application/json",
           },
         },
+      );
+    }
+
+    try {
+      await notifyLeadByEmail(
+        env as unknown as LeadNotificationEnv,
+        {
+          phoneRaw,
+          phoneNormalized,
+          name,
+          intent,
+          sourceUrl,
+        },
+      );
+    } catch (error) {
+      console.error(
+        "LEAD_NOTIFICATION_ERROR",
+        error,
       );
     }
 
