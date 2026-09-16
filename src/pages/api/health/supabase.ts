@@ -2,10 +2,11 @@ import type { APIRoute } from "astro";
 
 export const prerender = false;
 
-export const GET: APIRoute = async () => {
+export const GET: APIRoute = async ({ locals }) => {
   try {
-    const supabaseUrl = import.meta.env.SUPABASE_URL;
-    const supabaseSecretKey = import.meta.env.SUPABASE_SECRET_KEY;
+    const { env } = locals.runtime;
+    const supabaseUrl = env.SUPABASE_URL;
+    const supabaseSecretKey = env.SUPABASE_SECRET_KEY;
 
     if (!supabaseUrl || !supabaseSecretKey) {
       console.error("SUPABASE_HEALTH_CONFIG_MISSING");

@@ -24,7 +24,7 @@ function normalizeVietnamPhone(value: unknown): string | null {
   return null;
 }
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, locals }) => {
   let body: Record<string, unknown>;
 
   try {
@@ -91,11 +91,13 @@ export const POST: APIRoute = async ({ request }) => {
         ? body.sourceUrl.trim().slice(0, 500)
         : "/";
 
+    const { env } = locals.runtime;
+
     const supabaseUrl =
-      import.meta.env.SUPABASE_URL;
+      env.SUPABASE_URL;
 
     const supabaseSecretKey =
-      import.meta.env.SUPABASE_SECRET_KEY;
+      env.SUPABASE_SECRET_KEY;
 
     if (!supabaseUrl || !supabaseSecretKey) {
       console.error("LEAD_CAPTURE_CONFIG_MISSING");
