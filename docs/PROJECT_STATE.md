@@ -9,13 +9,14 @@ BAO LOC BDS đã hoàn tất giai đoạn xây nền tảng và đang ở **RUN 
 
 Chuỗi hiện tại:
 
-`BUILD nền tảng ✓ -> SEO foundation ✓ -> Content foundation ✓ -> Internal graph ✓ -> Lead availability hardening ✓ -> Google crawl/index -> MEASURE -> cải tiến theo dữ liệu`
+`BUILD nền tảng ✓ -> SEO foundation ✓ -> Content foundation ✓ -> Internal graph ✓ -> Lead availability hardening ✓ -> Contact/Lead notification ✓ -> Google crawl/index -> MEASURE -> cải tiến theo dữ liệu`
 
 Mục tiêu:
 - tài sản SEO và bán hàng BĐS dài hạn tại Bảo Lộc;
 - topical authority theo project cluster;
 - nội dung fact-first, có nguồn;
 - chuyển traffic thành lead;
+- lead không bị bỏ sót sau khi khách gửi form;
 - kiến trúc tái sử dụng, không hard-code project vào reusable core.
 
 **Không còn active coding task.** Trọng tâm phát triển kỹ thuật chuyển lại **nhaHub**.
@@ -38,7 +39,7 @@ Mục tiêu:
 
 Cloudflare `workerd/miniflare` yêu cầu macOS mới hơn Big Sur, nên Cloudflare server runtime local không phải mục tiêu hỗ trợ trên máy hiện tại. Không phá DEV static để né giới hạn này.
 
-Production hiện có auto-deployment sau GitHub push; ngày 2026-09-16 quan sát deployment Cloudflare xuất hiện khoảng 2 phút sau push. Không deploy thủ công nếu không có lý do và chưa được P đồng ý.
+Production có auto-deployment sau GitHub push; ngày 2026-09-16 cũng đã thực hiện manual deploy có chủ đích để đưa Contact Page + Lead Notification lên production và test E2E. Không deploy thủ công nếu không có lý do và chưa được P đồng ý.
 
 ## 3. Phú Gia Bảo Lộc — project cluster
 
@@ -68,9 +69,9 @@ ProjectNav sinh động từ collection, sort theo `order`, có active state và
 
 ## 4. Lead Capture V1 — DONE
 
-Production flow:
+Production flow hiện tại:
 
-`baolocbds.com -> LeadCapture -> POST /api/leads -> Cloudflare Worker -> Supabase public.leads -> success UI`
+`baolocbds.com -> LeadCapture -> POST /api/leads -> Cloudflare Worker -> Supabase public.leads -> Resend email notification -> success UI`
 
 LeadCapture V1:
 - phone required;
@@ -96,7 +97,8 @@ CTA intent mapping:
 - Tổng quan -> `quan-tam-du-an`;
 - Giá bán -> `bang-gia`;
 - Chính sách -> `chinh-sach`;
-- Mặt bằng -> `mat-bang`.
+- Mặt bằng -> `mat-bang`;
+- Trang Liên hệ -> `contact-general`.
 
 ### OPS-001 — Supabase Lead Availability — DONE 2026-09-16
 
@@ -156,7 +158,56 @@ Job:
 
 Mục đích: tạo database READ activity định kỳ và đồng thời kiểm tra đường Lead dependency. Không dùng fake lead/INSERT để giữ project active.
 
-Sau OPS-001, BAO LOC BDS quay lại **RUN & MEASURE**. Không mở thêm availability infrastructure nếu chưa có failure thực tế.
+### SEO-035 — Contact Page Foundation — DONE 2026-09-16
+
+Production route:
+
+`https://baolocbds.com/lien-he/`
+
+Đã hoàn tất:
+- trang Liên hệ riêng với copy hướng conversion;
+- phone / Zalo / email CTA;
+- SEO title + description + canonical qua Layout;
+- tái sử dụng `LeadCapture.astro`;
+- `intent="contact-general"`;
+- responsive desktop/mobile;
+- build PASS;
+- visual test local PASS;
+- production route PASS;
+- production lead submit PASS.
+
+Commit:
+- `df707da` — `SEO-035: add contact page foundation`.
+
+### OPS-002 — Lead Email Notification — DONE 2026-09-16
+
+Mục tiêu: sau khi khách gửi form thành công, P được thông báo ngay qua email thay vì phải chủ động mở Supabase kiểm tra.
+
+Implementation:
+- service mới `src/services/lead-notification.ts`;
+- `/api/leads` vẫn lưu Supabase trước;
+- chỉ sau khi Supabase save thành công mới gửi email notification qua Resend API;
+- notification failure không làm mất lead và không biến request đã lưu thành thất bại;
+- email chứa tên, số điện thoại, intent và source URL;
+- không hard-code API key trong repo.
+
+Cloudflare Worker secrets:
+- `RESEND_API_KEY`;
+- `LEAD_NOTIFICATION_TO`;
+- `LEAD_NOTIFICATION_FROM`.
+
+Resend:
+- domain `baolocbds.com` đã được cấu hình/verify để gửi mail;
+- sender production dùng domain `baolocbds.com`;
+- API key giữ ngoài source code.
+
+Production E2E verification ngày 2026-09-16:
+- `/lien-he/` -> form submit PASS -> Supabase PASS -> email notification PASS;
+- `/du-an/phu-gia-bao-loc/` -> `intent=quan-tam-du-an` -> Supabase PASS -> email notification PASS.
+
+Kết luận: lead flow hiện đã có cả persistence + notification.
+
+Sau OPS-002, BAO LOC BDS quay lại **RUN & MEASURE**. Không mở CRM/notification channel khác nếu chưa có nhu cầu vận hành thật.
 
 ## 5. SEO technical foundation — DONE
 
@@ -260,7 +311,6 @@ Nguyên tắc content:
 
 ## 10. Known issues / technical debt — NON-BLOCKING
 
-- `/lien-he/index.astro` hiện chưa có nội dung hoàn chỉnh; chỉ mở task khi P muốn hoàn thiện contact page riêng.
 - project hero image trong project route còn hard-code đường dẫn Phú Gia Bảo Lộc;
 - `PostRecommendations` và một số list route có thể cần chuẩn hóa `publishedAt ?? pubDate` khi content lớn hơn;
 - Related/Latest có thể cần dedupe khi số bài tăng;
@@ -287,9 +337,10 @@ Anti-spam chỉ làm khi có spam thật. Lead operations chỉ xây khi có lea
 Theo dõi:
 - Google crawl/indexing và Search Console;
 - production health;
-- cron-job.org history, đặc biệt xác nhận lần scheduled execution đầu tiên sau 14:00 ngày 2026-09-16;
+- cron-job.org history;
 - traffic/search queries;
 - lead và conversion signals;
+- email notification delivery nếu có lead thật;
 - cập nhật fact/content/media khi có dữ liệu mới.
 
 Ưu tiên nguồn lực coding hiện tại: **nhaHub**.
